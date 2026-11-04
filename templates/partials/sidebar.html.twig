@@ -1,0 +1,35 @@
+<aside class="admin-sidebar">
+
+    <h3>ADMIN PANEL</h3>
+
+    <a href="{{ path('app_admin') }}"
+       class="{{ app.current_route == 'app_admin' ? 'active' : '' }}">
+        DASHBOARD
+    </a>
+
+    <a href="{{ path('app_admin_bookings') }}"
+       class="{{ app.current_route == 'app_admin_bookings' ? 'active' : '' }}">
+        BOOKINGS
+    </a>
+
+    <a href="{{ path('app_admin_rooms') }}"
+       class="{{ app.current_route == 'app_admin_rooms' ? 'active' : '' }}">
+        ROOMS
+    </a>
+
+    <a href="{{ path('app_admin_messages') }}"
+       class="{{ app.current_route == 'app_admin_messages' ? 'active' : '' }}">
+        MESSAGES
+    </a>
+
+    <a href="{{ path('app_admin_reviews') }}"
+       class="{{ app.current_route == 'app_admin_reviews' ? 'active' : '' }}">
+        REVIEWS
+    </a>
+
+    <a href="{{ path('app_admin_website') }}"
+       class="{{ app.current_route == 'app_admin_website' ? 'active' : '' }}">
+        VIEW WEBSITE
+    </a>
+
+</aside>

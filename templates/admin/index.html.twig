@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Admin Dashboard | Bill's Resort
+{% endblock %}
+
+{% block body %}
+
+    <h1>DASHBOARD</h1>
+
+    <p>
+        Welcome to Bill's Resort Administration.
+    </p>
+
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card">
+            <h3>CUSTOMERS</h3>
+            <p class="number">0</p>
+        </div>
+
+
+        <div class="dashboard-card">
+            <h3>ROOMS</h3>
+            <p class="number">0</p>
+        </div>
+
+
+        <div class="dashboard-card">
+            <h3>TOTAL BOOKINGS</h3>
+            <p class="number">0</p>
+        </div>
+
+
+        <div class="dashboard-card">
+            <h3>PENDING BOOKINGS</h3>
+            <p class="number">0</p>
+        </div>
+
+    </div>
+
+
+    <div class="admin-section">
+
+        <div class="admin-section-header">
+
+            <h2>QUICK ACTIONS</h2>
+
+        </div>
+
+
+        <div class="quick-actions">
+
+            <a href="#" class="admin-btn">
+                VIEW BOOKINGS
+            </a>
+
+            <a href="#" class="admin-btn">
+                MANAGE ROOMS
+            </a>
+
+            <a href="#" class="admin-btn">
+                VIEW WEBSITE
+            </a>
+
+        </div>
+
+    </div>
+
+{% endblock %}
