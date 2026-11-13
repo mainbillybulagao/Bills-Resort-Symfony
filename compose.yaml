@@ -1,7 +1,8 @@
+
 services:
-  webdev_a_mysql: 
+  bills-resort-mysql:
     image: mysql:8.0
-    container_name: webdev_trial_mysql 
+    container_name: bills-resort-mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -11,25 +12,27 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - webdev_ab_db_data:/var/lib/mysql
+      - bills-resort-db-data:/var/lib/mysql
     networks:
-      - webdev_a_network
+      - bills-resort-network
 
-  webdev_a_phpmyadmin:
+  bills-resort-phpmyadmin:
     image: phpmyadmin
-    container_name: webdev_ab_phpmyadmin  
+    container_name: bills-resort-phpmyadmin
     restart: unless-stopped
     environment:
-      PMA_HOST: webdev_trial_mysql
+      PMA_HOST: bills-resort-mysql
     ports:
       - "8080:80"
+    depends_on:
+      - bills-resort-mysql
     networks:
-      - webdev_a_network
-    
-      
+      - bills-resort-network
 
 volumes:
-  webdev_ab_db_data:
+  bills-resort-db-data:
 
 networks:
-  webdev_a_network:
+  bills-resort-network:
+    
+    
