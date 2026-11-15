@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}Bill's Resort Admin{% endblock %}</title>
+    <title>{% block title %}Bill's Resort{% endblock %}</title>
 
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
@@ -15,7 +16,12 @@
 
     <div class="admin-layout">
 
-        {% include 'partials/sidebar.html.twig' %}
+        {% if is_granted('ROLE_ADMIN') %}
+            {% include 'partials/sidebar.html.twig' %}
+
+        {% elseif is_granted('ROLE_STAFF') %}
+            {% include 'partials/staff_sidebar.html.twig' %}
+        {% endif %}
 
         <main class="admin-content">
             {% block body %}{% endblock %}

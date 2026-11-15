@@ -1,13 +1,28 @@
+
 <header class="admin-header">
 
     <div class="admin-logo">
-        <img src="{{ asset('images/mainlogo.jpg') }}" alt="Bill's Resort Logo">
+        <a href="{{ path('app_home') }}">
+            <img src="{{ asset('images/mainlogo.jpg') }}" alt="Bill's Resort Logo">
+        </a>
     </div>
 
     <div class="admin-user">
-        <span>Welcome, Admin</span>
 
-        <a href="#" class="logout-btn">LOGOUT</a>
+        {% if app.user %}
+            <span>
+                Welcome, {{ app.user.name }}
+            </span>
+
+            <a href="{{ path('app_logout') }}" class="logout-btn">
+                LOGOUT
+            </a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="logout-btn">
+                LOGIN
+            </a>
+        {% endif %}
+
     </div>
 
 </header>

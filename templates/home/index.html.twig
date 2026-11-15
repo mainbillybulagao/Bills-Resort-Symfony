@@ -1,0 +1,488 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bill's Resort</title>
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="line"></div>
+
+        <!-- LOGO -->
+        <div class="logo-box">
+            <img
+                src="{{ asset('images/mainlogo.jpg') }}"
+                alt="Bill's Resort Logo"
+            >
+        </div>
+
+        <!-- NAVIGATION -->
+        <nav class="navbar">
+            <a href="#home">HOME</a>
+            <a href="#about">ABOUT US</a>
+            <a href="#rooms">ROOMS</a>
+            <a href="#gallery">GALLERY</a>
+            <a href="#contact">CONTACT US</a>
+
+            <a href="{{ path('app_book_now') }}" class="book-btn">
+                BOOK NOW!
+            </a>
+        </nav>
+
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+
+        <div class="hero-background"></div>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <div class="hero-welcome">
+                <span class="hero-line-left"></span>
+                <span>WELCOME TO</span>
+            </div>
+
+            <h1>Bill's Resort</h1>
+
+            <h3>San Jose, Negros Oriental</h3>
+
+            <div class="hero-line"></div>
+
+            <p>
+                A peaceful place to relax, enjoy the beach,
+                and create unforgettable moments with
+                family and friends.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="{{ path('app_booking_new') }}" class="hero-btn">
+                    BOOK YOUR STAY
+                </a>
+
+                <a href="#rooms" class="hero-outline-btn">
+                    EXPLORE ROOMS
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- BOTTOM TEXT -->
+        <div class="hero-bottom">
+
+            <span class="bottom-line"></span>
+            <span>RELAX</span>
+            <span>•</span>
+            <span>UNWIND</span>
+            <span>•</span>
+            <span>ENJOY</span>
+            <span class="bottom-line"></span>
+
+        </div>
+
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about section-line" id="about">
+
+        <div class="about-content">
+
+            <span class="section-label"></span>
+
+            <h2>ABOUT BILL'S RESORT</h2>
+
+            <p>
+                Bill's Resort is a relaxing destination
+                located in San Jose, Negros Oriental.
+                Enjoy comfortable rooms, beautiful
+                surroundings, refreshing views, and
+                a peaceful place to spend time with
+                family and friends.
+            </p>
+
+            <a href="#about" class="main-btn">
+                MORE ABOUT US
+            </a>
+
+        </div>
+
+        <div class="about-image">
+
+            <img
+                src="{{ asset('images/about.jpg') }}"
+                alt="About Bill's Resort"
+            >
+
+        </div>
+
+    </section>
+
+    <!-- ROOMS -->
+    <section class="rooms section-line" id="rooms">
+
+        <div class="rooms-header">
+
+            <span>STAY WITH US</span>
+
+            <h2>OUR ROOMS</h2>
+
+            <p>
+                Choose the room that best suits your stay
+                and enjoy a comfortable experience at Bill's Resort.
+            </p>
+
+        </div>
+
+        <div class="room-list">
+
+            <!-- FAMILY ROOM -->
+            <div class="room-item">
+
+                <div class="room-image">
+                    <img
+                        src="{{ asset('images/room1.jpg') }}"
+                        alt="Family Room"
+                    >
+                </div>
+
+                <div class="room-info">
+
+                    <span class="room-number">ROOM 01</span>
+
+                    <h3>FAMILY ROOM</h3>
+
+                    <p>
+                        A comfortable room for families and
+                        groups looking for a relaxing stay.
+                    </p>
+
+                    <a href="{{ path('app_booking_new') }}" class="room-btn">
+                        BOOK NOW!
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- DELUXE ROOM -->
+            <div class="room-item">
+
+                <div class="room-image">
+                    <img
+                        src="{{ asset('images/room2.jpg') }}"
+                        alt="Deluxe Room"
+                    >
+                </div>
+
+                <div class="room-info">
+
+                    <span class="room-number">ROOM 02</span>
+
+                    <h3>DELUXE ROOM</h3>
+
+                    <p>
+                        Enjoy a more comfortable atmosphere
+                        with a relaxing space for your stay.
+                    </p>
+
+                    <a href="{{ path('app_booking_new') }}" class="room-btn">
+                        BOOK NOW!
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- STANDARD ROOM -->
+            <div class="room-item">
+
+                <div class="room-image">
+                    <img
+                        src="{{ asset('images/room3.jpg') }}"
+                        alt="Standard Room"
+                    >
+                </div>
+
+                <div class="room-info">
+
+                    <span class="room-number">ROOM 03</span>
+
+                    <h3>STANDARD ROOM</h3>
+
+                    <p>
+                        A simple and comfortable room for
+                        guests who want a peaceful stay.
+                    </p>
+
+                    <a href="{{ path('app_booking_new') }}" class="room-btn">
+                        BOOK NOW!
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- SUITE ROOM -->
+            <div class="room-item">
+
+                <div class="room-image">
+                    <img
+                        src="{{ asset('images/room4.jpg') }}"
+                        alt="Suite Room"
+                    >
+                </div>
+
+                <div class="room-info">
+
+                    <span class="room-number">ROOM 04</span>
+
+                    <h3>SUITE ROOM</h3>
+
+                    <p>
+                        Enjoy a spacious and welcoming room
+                        for a relaxing resort experience.
+                    </p>
+
+                    <a href="{{ path('app_booking_new') }}" class="room-btn">
+                        BOOK NOW!
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery" id="gallery">
+
+        <div class="gallery-header">
+
+            <span>OUR RESORT</span>
+
+            <h2>GALLERY</h2>
+
+            <p>
+                Take a look at the relaxing atmosphere
+                and beautiful surroundings of Bill's Resort.
+            </p>
+
+        </div>
+
+        <div class="gallery-grid">
+
+            <div class="gallery-item">
+                <img
+                    src="{{ asset('images/gallery1.jpg') }}"
+                    alt="Bill's Resort Gallery 1"
+                >
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="{{ asset('images/gallery2.jpg') }}"
+                    alt="Bill's Resort Gallery 2"
+                >
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="{{ asset('images/gallery3.jpg') }}"
+                    alt="Bill's Resort Gallery 3"
+                >
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="{{ asset('images/gallery4.jpg') }}"
+                    alt="Bill's Resort Gallery 4"
+                >
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="{{ asset('images/gallery5.jpg') }}"
+                    alt="Bill's Resort Gallery 5"
+                >
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="{{ asset('images/gallery6.jpg') }}"
+                    alt="Bill's Resort Gallery 6"
+                >
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact section-line" id="contact">
+
+        <!-- CONTACT FORM -->
+        <div class="contact-form">
+
+            <span class="section-label"></span>
+
+            <h2>Send Us a Message</h2>
+
+            <form method="POST" action="#contact">
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                    required
+                >
+
+                <textarea
+                    name="message"
+                    placeholder="Message"
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    SEND MESSAGE
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- CONTACT INFORMATION -->
+        <div class="contact-info">
+
+            <span class="section-label"></span>
+
+            <h2>CONTACT INFORMATION</h2>
+
+            <h3>We're Here to Help</h3>
+
+            <p>
+                Have questions about our rooms or your stay?
+                Feel free to contact us. We are happy to help
+                you plan a relaxing visit to Bill's Resort.
+            </p>
+
+            <!-- ADDRESS -->
+            <div class="info-item">
+                <span class="icon">📍</span>
+                <span>San Jose, Negros Oriental</span>
+            </div>
+
+            <!-- PHONE -->
+            <div class="info-item">
+                <span class="icon">☎</span>
+                <span>0955 666 7777</span>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="info-item">
+                <span class="icon">✉</span>
+                <span>Billsresortinfo@gmail.com</span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <!-- FOOTER BRAND -->
+        <div class="footer-brand">
+
+            <div class="footer-logo">
+                <img
+                    src="{{ asset('images/mainlogo.jpg') }}"
+                    alt="Bill's Resort Logo"
+                >
+            </div>
+
+            <p class="footer-location">
+                San Jose, Negros Oriental
+            </p>
+
+            <!-- SOCIAL MEDIA -->
+            <div class="social">
+
+                <div class="social-item">
+                    <span class="social-icon">f</span>
+                    <span class="social-name">Bill's Resort</span>
+                </div>
+
+                <div class="social-item">
+                    <span class="social-icon">◎</span>
+                    <span class="social-name">Bill's Resort2006</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER LINE -->
+        <div class="footer-line"></div>
+
+        <!-- QUICK LINKS -->
+        <div class="quicklinks">
+
+            <h3>QUICK LINKS</h3>
+
+            <a href="#home">HOME</a>
+            <a href="#about">ABOUT US</a>
+            <a href="#rooms">ROOMS</a>
+            <a href="#gallery">GALLERY</a>
+            <a href="#contact">CONTACT US</a>
+
+            <a href="{{ path('app_booking_new') }}">
+                BOOK NOW!
+            </a>
+
+        </div>
+
+    </footer>
+
+    <!-- BOTTOM FOOTER -->
+    <div class="bottom-footer">
+
+        ALL RIGHTS RESERVED.
+        &nbsp;
+        Bill's Resort, San Jose, Negros Oriental
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Book Your Stay | Bill's Resort{% endblock %}
+
+{% block body %}
+
+<div class="admin-section">
+
+    <div class="admin-section-header">
+        <h2>BOOK YOUR STAY</h2>
+    </div>
+
+    <p>Welcome to Bill's Resort! Complete the form below to request your room reservation.</p>
+
+    {% for message in app.flashes('success') %}
+        <p class="success-message">{{ message }}</p>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <p class="error-message">{{ message }}</p>
+    {% endfor %}
+
+    {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.customerName) }}
+            {{ form_widget(form.customerName, {
+                attr: {class: 'form-control', readonly: true}
+            }) }}
+            {{ form_errors(form.customerName) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email, {
+                attr: {class: 'form-control', readonly: true}
+            }) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.contactNumber) }}
+            {{ form_widget(form.contactNumber, {
+                attr: {class: 'form-control', placeholder: 'Enter your contact number'}
+            }) }}
+            {{ form_errors(form.contactNumber) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.room) }}
+            {{ form_widget(form.room, {
+                attr: {class: 'form-control'}
+            }) }}
+            {{ form_errors(form.room) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.checkIn) }}
+            {{ form_widget(form.checkIn, {
+                attr: {class: 'form-control'}
+            }) }}
+            {{ form_errors(form.checkIn) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.checkOut) }}
+            {{ form_widget(form.checkOut, {
+                attr: {class: 'form-control'}
+            }) }}
+            {{ form_errors(form.checkOut) }}
+        </div>
+
+        <button type="submit" class="admin-btn">
+            CONFIRM BOOKING
+        </button>
+
+        <a href="{{ path('app_home') }}" class="admin-btn">
+            BACK TO HOME
+        </a>
+
+    {{ form_end(form) }}
+
+</div>
+
+{% endblock %}

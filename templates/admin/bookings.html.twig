@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}
@@ -8,9 +9,14 @@
 
     <h1>BOOKINGS</h1>
 
-    <p>
-        Manage resort bookings from this page.
-    </p>
+    <p>Manage all customer reservations from this page.</p>
+
+    {# SUCCESS MESSAGES #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     <div class="admin-section">
 
@@ -18,12 +24,105 @@
             <h2>BOOKING MANAGEMENT</h2>
         </div>
 
-        <div class="no-data">
-            <h2>No Booking Data Yet</h2>
-            <p>
-                Booking functionality will be added later.
-            </p>
-        </div>
+        {% if bookings is empty %}
+
+            <div class="no-data">
+                <h2>No Booking Data Yet</h2>
+                <p>Customer bookings will appear here.</p>
+            </div>
+
+        {% else %}
+
+            <div class="table-responsive">
+                <table class="admin-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>CUSTOMER</th>
+                            <th>EMAIL</th>
+                            <th>ROOM</th>
+                            <th>CHECK-IN</th>
+                            <th>CHECK-OUT</th>
+                            <th>TOTAL PRICE</th>
+                            <th>STATUS</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for booking in bookings %}
+
+                            <tr>
+                                <td>{{ booking.id }}</td>
+
+                                <td>{{ booking.customerName }}</td>
+
+                                <td>{{ booking.email }}</td>
+
+                                <td>{{ booking.room.roomName }}</td>
+
+                                <td>{{ booking.checkIn|date('M d, Y') }}</td>
+
+                                <td>{{ booking.checkOut|date('M d, Y') }}</td>
+
+                                <td>₱{{ booking.totalPrice|number_format(2) }}</td>
+
+                                <td>
+                                    {{ booking.status }}
+                                </td>
+
+                                <td>
+
+                                    {% if booking.status == 'Pending' %}
+
+                                        <form method="post"
+                                              action="{{ path('app_admin_booking_confirm', {'id': booking.id}) }}"
+                                              style="display:inline;">
+
+                                            <input type="hidden"
+                                                   name="_token"
+                                                   value="{{ csrf_token('confirm_booking_' ~ booking.id) }}">
+
+                                            <button type="submit">
+                                                CONFIRM
+                                            </button>
+
+                                        </form>
+
+                                        <form method="post"
+                                              action="{{ path('app_admin_booking_reject', {'id': booking.id}) }}"
+                                              style="display:inline;">
+
+                                            <input type="hidden"
+                                                   name="_token"
+                                                   value="{{ csrf_token('reject_booking_' ~ booking.id) }}">
+
+                                            <button type="submit">
+                                                REJECT
+                                            </button>
+
+                                        </form>
+
+                                    {% else %}
+
+                                        <span>No actions available</span>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+
+        {% endif %}
 
     </div>
 

@@ -1,0 +1,49 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Customer Account - Bill's Resort{% endblock %}
+
+{% block body %}
+
+<div class="container" style="max-width: 500px; margin: 60px auto; padding: 30px;">
+
+    <h1>Create Your Account</h1>
+    <p>Register to book your favorite room at Bill's Resort.</p>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+
+        {{ form_row(registrationForm.name, {
+            label: 'Full Name',
+            attr: { placeholder: 'Enter your full name' }
+        }) }}
+
+        {{ form_row(registrationForm.email, {
+            label: 'Email Address',
+            attr: { placeholder: 'Enter your email address' }
+        }) }}
+
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password',
+            attr: { placeholder: 'Create a password' }
+        }) }}
+
+        {{ form_row(registrationForm.agreeTerms, {
+            label: 'I agree to the terms and conditions'
+        }) }}
+
+        <button type="submit" class="btn">
+            Create Account
+        </button>
+
+    {{ form_end(registrationForm) }}
+
+    <p style="margin-top: 20px;">
+        Already have an account?
+        <a href="{{ path('app_login') }}">Login here</a>
+    </p>
+
+</div>
+
+{% endblock %}

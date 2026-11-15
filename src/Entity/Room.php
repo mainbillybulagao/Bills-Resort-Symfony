@@ -30,6 +30,9 @@ class Room
     private ?string $status = null;
 
     #[ORM\Column]
+    private ?int $capacity = null;
+
+    #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int
@@ -45,7 +48,6 @@ class Room
     public function setRoomName(string $roomName): static
     {
         $this->roomName = $roomName;
-
         return $this;
     }
 
@@ -57,7 +59,6 @@ class Room
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -69,7 +70,6 @@ class Room
     public function setPrice(string $price): static
     {
         $this->price = $price;
-
         return $this;
     }
 
@@ -81,7 +81,6 @@ class Room
     public function setImage(?string $image): static
     {
         $this->image = $image;
-
         return $this;
     }
 
@@ -93,7 +92,17 @@ class Room
     public function setStatus(string $status): static
     {
         $this->status = $status;
+        return $this;
+    }
 
+    public function getCapacity(): ?int
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity(int $capacity): static
+    {
+        $this->capacity = $capacity;
         return $this;
     }
 
@@ -105,7 +114,6 @@ class Room
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 }

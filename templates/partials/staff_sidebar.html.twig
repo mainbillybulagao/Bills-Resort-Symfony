@@ -1,0 +1,30 @@
+
+<aside class="admin-sidebar">
+
+    <h3>STAFF PANEL</h3>
+
+    <a href="{{ path('app_staff') }}"
+       class="{{ app.current_route == 'app_staff' ? 'active' : '' }}">
+        DASHBOARD
+    </a>
+
+    <a href="{{ path('app_booking_index') }}"
+       class="{{ app.current_route starts with 'app_booking_' ? 'active' : '' }}">
+        BOOKINGS
+    </a>
+
+    <a href="{{ path('app_message_index') }}"
+       class="{{ app.current_route starts with 'app_message_' ? 'active' : '' }}">
+        MESSAGES
+    </a>
+
+    <a href="{{ path('app_review_index') }}"
+       class="{{ app.current_route starts with 'app_review_' ? 'active' : '' }}">
+        REVIEWS
+    </a>
+
+    <a href="{{ path('app_home') }}">
+        VIEW WEBSITE
+    </a>
+
+</aside>

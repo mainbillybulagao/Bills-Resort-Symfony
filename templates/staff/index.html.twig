@@ -1,0 +1,86 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Staff Dashboard | Bill's Resort
+{% endblock %}
+
+{% block body %}
+
+    <h1>STAFF DASHBOARD</h1>
+
+    <p>
+        Welcome to Bill's Resort Staff Management.
+        Manage daily resort operations here.
+    </p>
+
+    {# STAFF STATISTICS #}
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card">
+            <h3>TOTAL BOOKINGS</h3>
+            <p class="number">0</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>PENDING BOOKINGS</h3>
+            <p class="number">0</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>CONFIRMED BOOKINGS</h3>
+            <p class="number">0</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>TOTAL MESSAGES</h3>
+            <p class="number">0</p>
+        </div>
+
+    </div>
+
+
+    {# STAFF QUICK ACTIONS #}
+
+    <div class="admin-section">
+
+        <div class="admin-section-header">
+            <h2>QUICK ACTIONS</h2>
+        </div>
+
+        <div class="quick-actions">
+
+            <a href="{{ path('app_booking_index') }}" class="admin-btn">
+                MANAGE BOOKINGS
+            </a>
+
+            <a href="{{ path('app_message_index') }}" class="admin-btn">
+                VIEW MESSAGES
+            </a>
+
+            <a href="{{ path('app_review_index') }}" class="admin-btn">
+                MANAGE REVIEWS
+            </a>
+
+        </div>
+
+    </div>
+
+
+    {# STAFF INFORMATION #}
+
+    <div class="admin-section">
+
+        <div class="admin-section-header">
+            <h2>STAFF REMINDERS</h2>
+        </div>
+
+        <p>
+            Review pending bookings regularly.
+            Keep customer messages updated and check new reviews.
+        </p>
+
+    </div>
+
+{% endblock %}
