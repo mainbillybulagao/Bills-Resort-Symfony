@@ -1042,3 +1042,37 @@ textarea {
         height: 210px;
     }
 }
+
+/* LOGIN PAGE CENTERING FIX */
+
+body:has(.auth-page) .admin-layout {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+body:has(.auth-page) .admin-content {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+/* CENTER FOOTER ON LOGIN PAGE */
+body:has(.login-page) .admin-footer {
+    width: 100% !important;
+    margin-left: 0 !important;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.auth-page {
+    width: 100%;
+    min-height: 75vh;
+    margin: 0 auto;
+    box-sizing: border-box;
+}

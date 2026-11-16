@@ -1,0 +1,316 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}My Bookings | Bill's Resort{% endblock %}
+
+{% block body %}
+
+<style>
+    .customer-bookings-page {
+        max-width: 1200px;
+        margin: 45px auto;
+        padding: 25px;
+        color: #124d57;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .bookings-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .bookings-header span {
+        color: #17606b;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 3px;
+    }
+
+    .bookings-header h1 {
+        font-family: 'Lora', serif;
+        font-size: 36px;
+        margin: 12px 0;
+    }
+
+    .bookings-header p {
+        color: #64777a;
+        font-size: 14px;
+    }
+
+    .bookings-container {
+        background: white;
+        padding: 30px;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(18, 77, 87, 0.06);
+    }
+
+    .bookings-section-heading {
+        font-family: 'Lora', serif;
+        font-size: 24px;
+        margin: 0 0 10px;
+    }
+
+    .bookings-description {
+        color: #64777a;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .booking-alert {
+        padding: 13px 16px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        background: #e3f5e8;
+        color: #216e39;
+    }
+
+    .booking-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 25px;
+    }
+
+    .booking-btn {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+        transition: 0.2s ease;
+    }
+
+    .booking-btn-primary {
+        background: #17606b;
+        color: white;
+    }
+
+    .booking-btn-primary:hover {
+        background: #124d57;
+        color: white;
+    }
+
+    .booking-btn-secondary {
+        background: #dce9e9;
+        color: #124d57;
+    }
+
+    .booking-btn-secondary:hover {
+        background: #c5d8da;
+        color: #124d57;
+    }
+
+    .bookings-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .bookings-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 650px;
+    }
+
+    .bookings-table th {
+        background: #17606b;
+        color: white;
+        padding: 15px;
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 1px;
+    }
+
+    .bookings-table td {
+        padding: 16px 15px;
+        border-bottom: 1px solid #e5eeee;
+        font-size: 13px;
+    }
+
+    .bookings-table tbody tr:hover {
+        background: #f5f9f9;
+    }
+
+    .booking-status {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #dce9e9;
+        color: #124d57;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .booking-price {
+        font-weight: 700;
+        color: #17606b;
+        white-space: nowrap;
+    }
+
+    .empty-bookings {
+        padding: 45px 20px;
+        text-align: center;
+        background: #f5f9f9;
+        border-radius: 10px;
+    }
+
+    .empty-bookings h3 {
+        font-family: 'Lora', serif;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .empty-bookings p {
+        color: #64777a;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .bookings-footer {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    @media (max-width: 700px) {
+        .customer-bookings-page {
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        .bookings-header h1 {
+            font-size: 28px;
+        }
+
+        .bookings-container {
+            padding: 18px;
+        }
+
+        .booking-actions {
+            justify-content: stretch;
+        }
+
+        .booking-actions .booking-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="customer-bookings-page">
+
+    <!-- PAGE HEADER -->
+    <div class="bookings-header">
+        <span>WELCOME TO BILL'S RESORT</span>
+        <h1>MY BOOKINGS</h1>
+        <p>View and keep track of your room reservations.</p>
+    </div>
+
+    <!-- SUCCESS MESSAGES -->
+    {% for message in app.flashes('success') %}
+        <div class="booking-alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="bookings-container">
+
+        <h2 class="bookings-section-heading">Reservation History</h2>
+
+        <p class="bookings-description">
+            Here are the details and current status of your bookings.
+        </p>
+
+        <div class="booking-actions">
+            <a href="{{ path('app_customer_booking_new') }}"
+               class="booking-btn booking-btn-primary">
+                + BOOK ANOTHER ROOM
+            </a>
+        </div>
+
+        {% if bookings is empty %}
+
+            <div class="empty-bookings">
+                <h3>No Bookings Yet</h3>
+
+                <p>
+                    You haven't made a reservation yet.
+                    Explore our available rooms and book your stay.
+                </p>
+
+                <a href="{{ path('app_customer_booking_new') }}"
+                   class="booking-btn booking-btn-primary">
+                    EXPLORE ROOMS
+                </a>
+            </div>
+
+        {% else %}
+
+            <div class="bookings-table-wrapper">
+
+                <table class="bookings-table">
+
+                    <thead>
+                        <tr>
+                            <th>BOOKING ID</th>
+                            <th>ROOM</th>
+                            <th>CHECK-IN</th>
+                            <th>CHECK-OUT</th>
+                            <th>TOTAL PRICE</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for booking in bookings %}
+
+                            <tr>
+                                <td>#{{ booking.id }}</td>
+
+                                <td>
+                                    {{ booking.room ? booking.room.roomName : 'No room assigned' }}
+                                </td>
+
+                                <td>
+                                    {{ booking.checkIn|date('M d, Y') }}
+                                </td>
+
+                                <td>
+                                    {{ booking.checkOut|date('M d, Y') }}
+                                </td>
+
+                                <td class="booking-price">
+                                    ₱{{ booking.totalPrice|number_format(2, '.', ',') }}
+                                </td>
+
+                                <td>
+                                    <span class="booking-status">
+                                        {{ booking.status|default('Pending')|capitalize }}
+                                    </span>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- BACK TO HOME -->
+    <div class="bookings-footer">
+        <a href="{{ path('app_home') }}"
+           class="booking-btn booking-btn-secondary">
+            BACK TO HOME
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

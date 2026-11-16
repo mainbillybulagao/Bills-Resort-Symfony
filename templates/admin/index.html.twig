@@ -1,40 +1,292 @@
+ {% extends 'base.html.twig' %}
 
-{% extends 'base.html.twig' %}
-
-{% block title %}
-    Admin Dashboard | Bill's Resort
-{% endblock %}
+{% block title %}Admin Dashboard | Bill's Resort{% endblock %}
 
 {% block body %}
 
-    <h1>DASHBOARD</h1>
+<style>
+    /* =====================================================
+       ADMIN DASHBOARD
+       ===================================================== */
 
-    <p>
-        Welcome to Bill's Resort Administration.
-    </p>
+    .dashboard-page {
+        width: 100%;
+        max-width: 1250px;
+        margin: 0 auto;
+    }
 
-    <div class="dashboard-cards">
+    /* HEADER */
 
-        <div class="dashboard-card">
-            <h3>REGISTERED USERS</h3>
-            <p class="number">{{ totalUsers }}</p>
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 35px;
+    }
+
+    .dashboard-heading h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .dashboard-heading p {
+        color: #64777a;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .dashboard-label {
+        background: #e5f1f1;
+        color: #17606b;
+        padding: 10px 17px;
+        border-radius: 30px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    /* STATISTICS GRID */
+
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+    }
+
+    /* STATISTIC CARD */
+
+    .dashboard-card {
+        position: relative;
+        background: #ffffff;
+        padding: 27px;
+        border: 1px solid #dce9e9;
+        border-radius: 14px;
+        box-shadow: 0 4px 15px rgba(18, 77, 87, 0.06);
+        transition: all 0.25s ease;
+        overflow: hidden;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(18, 77, 87, 0.11);
+    }
+
+    .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .card-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e8f2f2;
+        color: #17606b;
+        border-radius: 12px;
+        font-size: 23px;
+    }
+
+    .card-category {
+        color: #819295;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .dashboard-card h3 {
+        color: #64777a;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        margin-bottom: 10px;
+    }
+
+    .dashboard-card .number {
+        color: #124d57;
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    .card-description {
+        color: #98a7a9;
+        font-size: 11px;
+        margin-top: 10px;
+    }
+
+    /* CARD ACCENT */
+
+    .dashboard-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #17606b;
+        opacity: 0.8;
+    }
+
+    .dashboard-card.pending::after {
+        background: #d49a42;
+    }
+
+    .dashboard-card.pending .card-icon {
+        background: #fff4e2;
+        color: #bd8129;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 900px) {
+        .dashboard-cards {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 550px) {
+        .dashboard-header {
+            align-items: flex-start;
+        }
+
+        .dashboard-heading h1 {
+            font-size: 25px;
+        }
+
+        .dashboard-cards {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .dashboard-card {
+            padding: 23px;
+        }
+    }
+</style>
+
+
+<div class="dashboard-page">
+
+    <!-- DASHBOARD HEADER -->
+
+    <div class="dashboard-header">
+
+        <div class="dashboard-heading">
+            <h1>Admin Dashboard</h1>
+
+            <p>
+                Welcome to Bill's Resort Administration.
+                Here's an overview of your resort operations.
+            </p>
         </div>
 
-        <div class="dashboard-card">
-            <h3>ROOMS</h3>
-            <p class="number">{{ totalRooms }}</p>
-        </div>
-
-        <div class="dashboard-card">
-            <h3>TOTAL BOOKINGS</h3>
-            <p class="number">{{ totalBookings }}</p>
-        </div>
-
-        <div class="dashboard-card">
-            <h3>PENDING BOOKINGS</h3>
-            <p class="number">{{ pendingBookings }}</p>
+        <div class="dashboard-label">
+            ADMINISTRATION PANEL
         </div>
 
     </div>
+
+
+    <!-- DASHBOARD STATISTICS -->
+
+    <div class="dashboard-cards">
+
+        <!-- REGISTERED USERS -->
+
+        <div class="dashboard-card">
+            <div class="card-top">
+                <div class="card-icon">♙</div>
+                <span class="card-category">Accounts</span>
+            </div>
+
+            <h3>REGISTERED USERS</h3>
+            <p class="number">{{ totalUsers }}</p>
+            <p class="card-description">Total registered accounts</p>
+        </div>
+
+
+        <!-- TOTAL STAFF -->
+
+        <div class="dashboard-card">
+            <div class="card-top">
+                <div class="card-icon">♧</div>
+                <span class="card-category">Personnel</span>
+            </div>
+
+            <h3>TOTAL STAFF</h3>
+            <p class="number">{{ totalStaff }}</p>
+            <p class="card-description">Registered resort staff</p>
+        </div>
+
+
+        <!-- TOTAL RECORDS -->
+
+        <div class="dashboard-card">
+            <div class="card-top">
+                <div class="card-icon">▤</div>
+                <span class="card-category">Overview</span>
+            </div>
+
+            <h3>TOTAL RECORDS</h3>
+            <p class="number">{{ totalRecords }}</p>
+            <p class="card-description">All resort records</p>
+        </div>
+
+
+        <!-- TOTAL ROOMS -->
+
+        <div class="dashboard-card">
+            <div class="card-top">
+                <div class="card-icon">⌂</div>
+                <span class="card-category">Accommodation</span>
+            </div>
+
+            <h3>TOTAL ROOMS</h3>
+            <p class="number">{{ totalRooms }}</p>
+            <p class="card-description">Rooms in the resort</p>
+        </div>
+
+
+        <!-- TOTAL BOOKINGS -->
+
+        <div class="dashboard-card">
+            <div class="card-top">
+                <div class="card-icon">▣</div>
+                <span class="card-category">Reservations</span>
+            </div>
+
+            <h3>TOTAL BOOKINGS</h3>
+            <p class="number">{{ totalBookings }}</p>
+            <p class="card-description">All recorded bookings</p>
+        </div>
+
+
+        <!-- PENDING BOOKINGS -->
+
+        <div class="dashboard-card pending">
+            <div class="card-top">
+                <div class="card-icon">◷</div>
+                <span class="card-category">Attention</span>
+            </div>
+
+            <h3>PENDING BOOKINGS</h3>
+            <p class="number">{{ pendingBookings }}</p>
+            <p class="card-description">Bookings awaiting confirmation</p>
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

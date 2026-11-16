@@ -1,43 +1,237 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Message index{% endblock %}
+{% block title %}Message Management | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Message index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Subject</th>
-                <th>Message</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for message in messages %}
-            <tr>
-                <td>{{ message.id }}</td>
-                <td>{{ message.name }}</td>
-                <td>{{ message.email }}</td>
-                <td>{{ message.subject }}</td>
-                <td>{{ message.message }}</td>
-                <td>{{ message.createdAt ? message.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_message_show', {'id': message.id}) }}">show</a>
-                    <a href="{{ path('app_message_edit', {'id': message.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<style>
+    .staff-message-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 10px 0 40px;
+    }
 
-    <a href="{{ path('app_message_new') }}">Create new</a>
+    .staff-message-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .staff-message-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 27px;
+        margin: 0 0 8px;
+    }
+
+    .staff-message-header p {
+        color: #718386;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .staff-message-add {
+        display: inline-block;
+        background: #17606b;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 11px 18px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .staff-message-add:hover {
+        background: #124d57;
+        color: #ffffff;
+    }
+
+    .staff-message-card {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 3px 12px rgba(18, 77, 87, 0.05);
+    }
+
+    .staff-message-card h2 {
+        color: #124d57;
+        font-size: 17px;
+        margin: 0 0 20px;
+    }
+
+    .staff-message-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .staff-message-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 850px;
+    }
+
+    .staff-message-table th {
+        background: #edf5f5;
+        color: #17606b;
+        text-align: left;
+        padding: 14px 12px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        white-space: nowrap;
+    }
+
+    .staff-message-table td {
+        padding: 15px 12px;
+        border-bottom: 1px solid #edf2f2;
+        color: #526b6e;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .staff-message-table tbody tr:hover {
+        background: #f8fbfb;
+    }
+
+    .staff-message-table .message-content {
+        min-width: 200px;
+        max-width: 280px;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        line-height: 1.6;
+    }
+
+    .staff-message-table .subject-content {
+        min-width: 130px;
+        max-width: 180px;
+        overflow-wrap: anywhere;
+    }
+
+    .staff-message-actions {
+        display: flex;
+        gap: 7px;
+        white-space: nowrap;
+    }
+
+    .staff-message-action {
+        display: inline-block;
+        padding: 7px 11px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .staff-message-action.view {
+        background: #e5f2f2;
+        color: #17606b;
+    }
+
+    .staff-message-action.edit {
+        background: #fff3df;
+        color: #9a681d;
+    }
+
+    .staff-message-action:hover {
+        opacity: 0.8;
+    }
+
+    .staff-message-empty {
+        text-align: center;
+        padding: 35px 15px !important;
+        color: #829496 !important;
+    }
+
+    @media (max-width: 650px) {
+        .staff-message-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .staff-message-header h1 {
+            font-size: 23px;
+        }
+
+        .staff-message-card {
+            padding: 18px;
+        }
+    }
+</style>
+
+<div class="staff-message-page">
+
+    <div class="staff-message-header">
+        <div>
+            <h1>MESSAGE MANAGEMENT</h1>
+            <p>View and manage messages received by Bill's Resort.</p>
+        </div>
+
+        <a href="{{ path('app_message_new') }}" class="staff-message-add">
+            + CREATE MESSAGE
+        </a>
+    </div>
+
+    <div class="staff-message-card">
+
+        <h2>ALL MESSAGES</h2>
+
+        <div class="staff-message-table-wrapper">
+            <table class="staff-message-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Date Received</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for message in messages %}
+                    <tr>
+                        <td>#{{ message.id }}</td>
+                        <td>{{ message.name }}</td>
+                        <td>{{ message.email }}</td>
+                        <td class="subject-content">{{ message.subject }}</td>
+                        <td class="message-content">{{ message.message }}</td>
+                        <td>
+                            {{ message.createdAt ? message.createdAt|date('M d, Y h:i A') : '—' }}
+                        </td>
+                        <td>
+                            <div class="staff-message-actions">
+                                <a href="{{ path('app_message_show', {'id': message.id}) }}"
+                                   class="staff-message-action view">
+                                    VIEW
+                                </a>
+
+                                <a href="{{ path('app_message_edit', {'id': message.id}) }}"
+                                   class="staff-message-action edit">
+                                    EDIT
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="staff-message-empty">
+                            No messages found.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

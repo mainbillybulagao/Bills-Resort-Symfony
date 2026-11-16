@@ -1,13 +1,226 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Message{% endblock %}
+{% block title %}Edit Message | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Edit Message</h1>
 
-    {{ include('message/_form.html.twig', {'button_label': 'Update'}) }}
+<style>
+    .message-edit-page {
+        max-width: 900px;
+        margin: 45px auto;
+        padding: 25px;
+        color: #124d57;
+        font-family: 'Montserrat', sans-serif;
+    }
 
-    <a href="{{ path('app_message_index') }}">back to list</a>
+    .message-edit-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
 
-    {{ include('message/_delete_form.html.twig') }}
+    .message-edit-header span {
+        color: #17606b;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 3px;
+    }
+
+    .message-edit-header h1 {
+        font-family: 'Lora', serif;
+        font-size: 34px;
+        margin: 12px 0;
+    }
+
+    .message-edit-header p {
+        color: #64777a;
+        font-size: 14px;
+    }
+
+    .message-edit-card {
+        background: white;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(18, 77, 87, 0.06);
+    }
+
+    .message-edit-card h2 {
+        font-family: 'Lora', serif;
+        font-size: 23px;
+        margin: 0 0 10px;
+    }
+
+    .message-edit-description {
+        color: #64777a;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .message-edit-card form > div {
+        margin-bottom: 18px;
+    }
+
+    .message-edit-card label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .message-edit-card input,
+    .message-edit-card textarea,
+    .message-edit-card select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        border: 1px solid #c5d8da;
+        border-radius: 6px;
+        background: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+    }
+
+    .message-edit-card textarea {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+    .message-edit-card input:focus,
+    .message-edit-card textarea:focus,
+    .message-edit-card select:focus {
+        outline: none;
+        border-color: #17606b;
+    }
+
+    .message-edit-card button[type="submit"] {
+        background: #17606b;
+        color: white;
+        padding: 12px 22px;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .message-edit-card button[type="submit"]:hover {
+        background: #124d57;
+    }
+
+    .message-edit-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .message-back-btn {
+        display: inline-block;
+        padding: 12px 20px;
+        background: #dce9e9;
+        color: #124d57;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .message-back-btn:hover {
+        background: #c5d8da;
+    }
+
+    .message-delete-section {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #dce9e9;
+    }
+
+    .message-delete-section button {
+        background: #b42318;
+        color: white;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .message-delete-section button:hover {
+        background: #8f1d14;
+    }
+
+    @media (max-width: 600px) {
+        .message-edit-page {
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        .message-edit-header h1 {
+            font-size: 27px;
+        }
+
+        .message-edit-card {
+            padding: 20px;
+        }
+
+        .message-edit-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .message-back-btn {
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="message-edit-page">
+
+    <!-- PAGE HEADER -->
+    <div class="message-edit-header">
+        <span>BILL'S RESORT STAFF PANEL</span>
+        <h1>EDIT MESSAGE</h1>
+        <p>Update and manage customer messages.</p>
+    </div>
+
+    <!-- EDIT FORM -->
+    <div class="message-edit-card">
+
+        <h2>Message Information</h2>
+
+        <p class="message-edit-description">
+            Review the message details and save your changes.
+        </p>
+
+        {{ include('message/_form.html.twig', {
+            'button_label': 'UPDATE MESSAGE'
+        }) }}
+
+        <div class="message-edit-actions">
+
+            <a href="{{ path('app_message_index') }}"
+               class="message-back-btn">
+                BACK TO MESSAGES
+            </a>
+
+        </div>
+
+        <div class="message-delete-section">
+
+            <p>
+                <strong>Delete Message</strong>
+            </p>
+
+            {{ include('message/_delete_form.html.twig') }}
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

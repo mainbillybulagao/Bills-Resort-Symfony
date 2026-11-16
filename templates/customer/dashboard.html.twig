@@ -1,0 +1,179 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Customer Dashboard | Bill's Resort{% endblock %}
+
+{% block body %}
+
+<style>
+    .customer-dashboard {
+        max-width: 1150px;
+        margin: 0 auto;
+        padding: 35px 25px;
+    }
+
+    .dashboard-welcome {
+        background: linear-gradient(135deg, #17606b, #124d57);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-welcome h1 {
+        color: white;
+        font-family: 'Lora', serif;
+        font-size: 30px;
+        margin: 0 0 12px;
+    }
+
+    .dashboard-welcome p {
+        color: #dce9e9;
+        font-size: 14px;
+        margin: 0 0 22px;
+    }
+
+    .dashboard-button {
+        display: inline-block;
+        padding: 13px 25px;
+        background: white;
+        color: #124d57;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+    .dashboard-button:hover {
+        background: #dce9e9;
+        transform: translateY(-2px);
+    }
+
+    .dashboard-section h2 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 25px;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .dashboard-card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 18px rgba(18, 77, 87, 0.08);
+        border: 1px solid #e4eeee;
+    }
+
+    .dashboard-card h3 {
+        color: #17606b;
+        font-size: 17px;
+        margin: 0 0 10px;
+    }
+
+    .dashboard-card p {
+        color: #718386;
+        font-size: 13px;
+        line-height: 1.7;
+        margin: 0 0 15px;
+    }
+
+    .dashboard-link {
+        color: #17606b;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .dashboard-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 650px) {
+        .dashboard-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-welcome {
+            padding: 28px;
+        }
+
+        .dashboard-welcome h1 {
+            font-size: 25px;
+        }
+    }
+</style>
+
+<div class="customer-dashboard">
+
+    <!-- WELCOME SECTION -->
+    <section class="dashboard-welcome">
+
+        <h1>
+            Welcome, {{ customer.name }}!
+        </h1>
+
+        <p>
+            Welcome to your Bill's Resort customer dashboard.
+            Manage your bookings and plan your next relaxing stay.
+        </p>
+
+        <a href="{{ path('app_customer_booking_new') }}"
+           class="dashboard-button">
+            BOOK A ROOM
+        </a>
+
+    </section>
+
+    <!-- DASHBOARD OPTIONS -->
+    <section class="dashboard-section">
+
+        <h2>My Account</h2>
+
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card">
+
+                <h3>My Bookings</h3>
+
+                <p>
+                    View and keep track of your room reservations
+                    and booking status.
+                </p>
+
+                <a href="{{ path('app_booking_index') }}"
+                   class="dashboard-link">
+                    VIEW MY BOOKINGS →
+                </a>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <h3>Book a Room</h3>
+
+                <p>
+                    Explore our available rooms and make your
+                    next reservation at Bill's Resort.
+                </p>
+
+                <a href="{{ path('app_customer_booking_new') }}"
+                   class="dashboard-link">
+                    BOOK NOW →
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,42 +1,217 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Message{% endblock %}
+{% block title %}View Message | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Message</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ message.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ message.name }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ message.email }}</td>
-            </tr>
-            <tr>
-                <th>Subject</th>
-                <td>{{ message.subject }}</td>
-            </tr>
-            <tr>
-                <th>Message</th>
-                <td>{{ message.message }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ message.createdAt ? message.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<style>
+    .view-message-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-    <a href="{{ path('app_message_index') }}">back to list</a>
+    .view-message-header {
+        margin-bottom: 25px;
+    }
 
-    <a href="{{ path('app_message_edit', {'id': message.id}) }}">edit</a>
+    .view-message-header h1 {
+        color: #124d57;
+        font-family: "Lora", serif;
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
 
-    {{ include('message/_delete_form.html.twig') }}
+    .view-message-header p {
+        color: #647779;
+        font-size: 14px;
+    }
+
+    .message-card {
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 12px;
+        border: 1px solid #dce9e9;
+        box-shadow: 0 4px 18px rgba(18, 77, 87, 0.10);
+    }
+
+    .message-card h2 {
+        color: #17606b;
+        font-size: 19px;
+        margin-bottom: 22px;
+    }
+
+    .message-details {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .message-details th,
+    .message-details td {
+        padding: 16px 12px;
+        border-bottom: 1px solid #e5eeee;
+        text-align: left;
+        font-size: 14px;
+        vertical-align: top;
+    }
+
+    .message-details th {
+        width: 30%;
+        color: #124d57;
+        font-weight: 700;
+    }
+
+    .message-details td {
+        color: #526466;
+        overflow-wrap: anywhere;
+    }
+
+    .message-content {
+        background: #f4f8f8;
+        padding: 18px;
+        border-radius: 8px;
+        line-height: 1.8;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    .message-id {
+        display: inline-block;
+        background: #dce9e9;
+        color: #124d57;
+        padding: 5px 11px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .message-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .message-btn {
+        display: inline-block;
+        padding: 12px 22px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+    }
+
+    .message-back {
+        background: #e7eeee;
+        color: #124d57;
+    }
+
+    .message-edit {
+        background: #17606b;
+        color: #ffffff;
+    }
+
+    .message-back:hover {
+        background: #dce9e9;
+    }
+
+    .message-edit:hover {
+        background: #124d57;
+    }
+
+    .message-delete {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e3eded;
+    }
+
+    @media (max-width: 600px) {
+        .message-card {
+            padding: 20px;
+        }
+
+        .message-details th,
+        .message-details td {
+            padding: 12px 6px;
+            font-size: 12px;
+        }
+    }
+</style>
+
+<div class="view-message-page">
+
+    <div class="view-message-header">
+        <h1>MESSAGE DETAILS</h1>
+        <p>View the message submitted through the Bill's Resort website.</p>
+    </div>
+
+    <div class="message-card">
+
+        <h2>MESSAGE INFORMATION</h2>
+
+        <table class="message-details">
+            <tbody>
+
+                <tr>
+                    <th>MESSAGE ID</th>
+                    <td>
+                        <span class="message-id">#{{ message.id }}</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>SENDER NAME</th>
+                    <td>{{ message.name }}</td>
+                </tr>
+
+                <tr>
+                    <th>EMAIL ADDRESS</th>
+                    <td>{{ message.email }}</td>
+                </tr>
+
+                <tr>
+                    <th>SUBJECT</th>
+                    <td>{{ message.subject }}</td>
+                </tr>
+
+                <tr>
+                    <th>MESSAGE</th>
+                    <td>
+                        <div class="message-content">{{ message.message }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>DATE RECEIVED</th>
+                    <td>
+                        {{ message.createdAt ? message.createdAt|date('F d, Y - h:i A') : 'Not available' }}
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="message-actions">
+
+            <a href="{{ path('app_message_index') }}" class="message-btn message-back">
+                BACK TO MESSAGES
+            </a>
+
+            <a href="{{ path('app_message_edit', {'id': message.id}) }}" class="message-btn message-edit">
+                EDIT MESSAGE
+            </a>
+
+        </div>
+
+        <div class="message-delete">
+            {{ include('message/_delete_form.html.twig') }}
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

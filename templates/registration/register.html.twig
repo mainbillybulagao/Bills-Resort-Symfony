@@ -1,48 +1,307 @@
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Create Customer Account - Bill's Resort{% endblock %}
+{% block title %}Register | Bill's Resort{% endblock %}
 
 {% block body %}
 
-<div class="container" style="max-width: 500px; margin: 60px auto; padding: 30px;">
+<style>
+    /* REGISTRATION PAGE */
+    .register-page {
+        width: 100%;
+        min-height: 75vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 35px 20px;
+        background: #f4f8f8;
+        box-sizing: border-box;
+    }
 
-    <h1>Create Your Account</h1>
-    <p>Register to book your favorite room at Bill's Resort.</p>
+    /* REGISTRATION CARD */
+    .register-container {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        width: 100%;
+        max-width: 900px;
+        min-height: 520px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(18, 77, 87, 0.13);
+    }
 
-    {{ form_errors(registrationForm) }}
+    /* WELCOME PANEL */
+    .register-welcome {
+        background: linear-gradient(135deg, #17606b, #124d57);
+        color: #ffffff;
+        padding: 50px 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
 
-    {{ form_start(registrationForm) }}
+    .register-welcome .resort-label {
+        color: #dce9e9;
+        font-size: 12px;
+        letter-spacing: 4px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
 
-        {{ form_row(registrationForm.name, {
-            label: 'Full Name',
-            attr: { placeholder: 'Enter your full name' }
-        }) }}
+    .register-welcome h1 {
+        font-family: 'Lora', serif;
+        font-size: 36px;
+        font-weight: 700;
+        color: #ffffff !important;
+        margin: 0 0 18px;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    }
 
-        {{ form_row(registrationForm.email, {
-            label: 'Email Address',
-            attr: { placeholder: 'Enter your email address' }
-        }) }}
+    .register-welcome p {
+        color: #ffffff;
+        font-size: 14px;
+        line-height: 1.8;
+        margin: 0;
+    }
 
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password',
-            attr: { placeholder: 'Create a password' }
-        }) }}
+    /* FORM AREA */
+    .register-form-area {
+        padding: 45px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #ffffff;
+    }
 
-        {{ form_row(registrationForm.agreeTerms, {
-            label: 'I agree to the terms and conditions'
-        }) }}
+    .register-form-area h2 {
+        font-family: 'Lora', serif;
+        color: #124d57;
+        font-size: 28px;
+        margin: 0 0 10px;
+    }
 
-        <button type="submit" class="btn">
-            Create Account
-        </button>
+    .register-subtitle {
+        color: #718386;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
 
-    {{ form_end(registrationForm) }}
+    /* FORM LABELS */
+    .register-form-area label {
+        display: block;
+        color: #124d57;
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
 
-    <p style="margin-top: 20px;">
-        Already have an account?
-        <a href="{{ path('app_login') }}">Login here</a>
-    </p>
+    /* FORM INPUTS */
+    .register-form-area input:not([type="checkbox"]) {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px;
+        border: 1px solid #cbdcde;
+        border-radius: 7px;
+        outline: none;
+        background: #ffffff;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .register-form-area input:focus {
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.10);
+    }
+
+    /* FIELD SPACING */
+    .register-form-area .mb-3,
+    .register-form-area .form-group {
+        margin-bottom: 17px;
+    }
+
+    .register-form-area input[type="checkbox"] {
+        margin-right: 8px;
+        accent-color: #17606b;
+    }
+
+    .register-form-area input[type="checkbox"] + label {
+        display: inline;
+        font-weight: 400;
+        color: #718386;
+    }
+
+    /* FORM ERRORS */
+    .register-form-area ul {
+        color: #a32121;
+        font-size: 12px;
+        padding-left: 20px;
+    }
+
+    .register-error {
+        background: #fde8e7;
+        color: #a32121;
+        padding: 12px;
+        border-radius: 7px;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    /* REGISTER BUTTON */
+    .register-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 7px;
+        background: #17606b;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 10px;
+    }
+
+    .register-button:hover {
+        background: #124d57;
+        transform: translateY(-2px);
+    }
+
+    /* LOGIN LINK */
+    .register-login-text {
+        text-align: center;
+        color: #718386;
+        font-size: 13px;
+        margin-top: 22px;
+    }
+
+    .register-login-text a {
+        color: #17606b;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .register-login-text a:hover {
+        color: #124d57;
+        text-decoration: underline;
+    }
+
+    /* PAGE CENTERING */
+    body:has(.register-page) .admin-layout {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body:has(.register-page) .admin-content {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 75vh;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 700px) {
+        .register-container {
+            grid-template-columns: 1fr;
+            max-width: 450px;
+        }
+
+        .register-welcome {
+            padding: 35px 25px;
+        }
+
+        .register-welcome h1 {
+            font-size: 30px;
+        }
+
+        .register-form-area {
+            padding: 35px 25px;
+        }
+    }
+</style>
+
+<div class="register-page">
+
+    <div class="register-container">
+
+        <!-- WELCOME SECTION -->
+        <div class="register-welcome">
+
+            <div class="resort-label">WELCOME TO</div>
+
+            <h1>Bill's Resort</h1>
+
+            <p>
+                Start your relaxing getaway with us.
+                Create your account today and discover
+                a comfortable and enjoyable stay.
+            </p>
+
+        </div>
+
+        <!-- REGISTRATION FORM -->
+        <div class="register-form-area">
+
+            <h2>Create Account</h2>
+
+            <p class="register-subtitle">
+                Fill in the details below to get started.
+            </p>
+
+            {{ form_errors(registrationForm) }}
+
+            {{ form_start(registrationForm) }}
+
+                {{ form_row(registrationForm.name, {
+                    label: 'Full Name',
+                    attr: {
+                        placeholder: 'Enter your full name'
+                    }
+                }) }}
+
+                {{ form_row(registrationForm.email, {
+                    label: 'Email Address',
+                    attr: {
+                        placeholder: 'Enter your email address'
+                    }
+                }) }}
+
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Password',
+                    attr: {
+                        placeholder: 'Create a password'
+                    }
+                }) }}
+
+                {{ form_row(registrationForm.agreeTerms, {
+                    label: 'I agree to the terms and conditions'
+                }) }}
+
+                <button type="submit" class="register-button">
+                    CREATE ACCOUNT
+                </button>
+
+            {{ form_end(registrationForm) }}
+
+            <div class="register-login-text">
+                Already have an account?
+                <a href="{{ path('app_login') }}">Login here</a>
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

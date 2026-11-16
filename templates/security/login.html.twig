@@ -1,38 +1,319 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Login | Bill's Resort{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+<style>
+    .login-page {
+        width: 100%;
+        min-height: 75vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 35px 20px;
+        background: #f4f8f8;
+        box-sizing: border-box;
+    }
+
+    .login-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        max-width: 850px;
+        min-height: 480px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(18, 77, 87, 0.13);
+    }
+
+    .login-welcome {
+        background: linear-gradient(135deg, #17606b, #124d57);
+        color: #ffffff;
+        padding: 55px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .login-welcome .resort-label {
+        color: #dce9e9;
+        font-size: 12px;
+        letter-spacing: 4px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .login-welcome h1 {
+        font-family: 'Lora', serif;
+        font-size: 38px;
+        font-weight: 700;
+        color: #ffffff !important;
+        margin: 0 0 18px;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    }
+
+    .login-welcome p {
+        color: #ffffff;
+        font-size: 14px;
+        line-height: 1.8;
+        margin: 0;
+    }
+
+    .login-form-area {
+        padding: 55px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #ffffff;
+    }
+
+    .login-form-area h2 {
+        font-family: 'Lora', serif;
+        color: #124d57;
+        font-size: 29px;
+        margin: 0 0 10px;
+    }
+
+    .login-subtitle {
+        color: #718386;
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .login-alert {
+        background: #fde8e7;
+        color: #a32121;
+        padding: 12px;
+        border-radius: 7px;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .login-user-message {
+        background: #e5f3f3;
+        color: #124d57;
+        padding: 12px;
+        border-radius: 7px;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .login-field {
+        margin-bottom: 20px;
+    }
+
+    .login-field label {
+        display: block;
+        color: #124d57;
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 9px;
+    }
+
+    .login-field input {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 14px;
+        border: 1px solid #cbdcde;
+        border-radius: 7px;
+        outline: none;
+        background: #ffffff;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .login-field input:focus {
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.10);
+    }
+
+    .login-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 7px;
+        background: #17606b;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 5px;
+    }
+
+    .login-button:hover {
+        background: #124d57;
+        transform: translateY(-2px);
+    }
+
+    /* REGISTER LINK */
+    .register-text {
+        text-align: center;
+        color: #718386;
+        font-size: 13px;
+        margin-top: 22px;
+    }
+
+    .register-text a {
+        color: #17606b;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .register-text a:hover {
+        color: #124d57;
+        text-decoration: underline;
+    }
+
+    .login-footer-text {
+        text-align: center;
+        color: #829194;
+        font-size: 12px;
+        margin-top: 25px;
+    }
+
+    /* CENTER LOGIN PAGE */
+    body:has(.login-page) .admin-layout {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body:has(.login-page) .admin-content {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 75vh;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+
+    @media (max-width: 700px) {
+        .login-container {
+            grid-template-columns: 1fr;
+            max-width: 430px;
+        }
+
+        .login-welcome {
+            padding: 35px 25px;
+        }
+
+        .login-welcome h1 {
+            font-size: 30px;
+        }
+
+        .login-form-area {
+            padding: 35px 25px;
+        }
+    }
+</style>
+
+<div class="login-page">
+
+    <div class="login-container">
+
+        <div class="login-welcome">
+
+            <div class="resort-label">WELCOME TO</div>
+
+            <h1>Bill's Resort</h1>
+
+            <p>
+                Your relaxing getaway starts here.
+                Sign in to access your account and
+                enjoy a comfortable stay with us.
+            </p>
+
+        </div>
+
+        <div class="login-form-area">
+
+            <h2>Welcome Back!</h2>
+
+            <p class="login-subtitle">
+                Please sign in to continue.
+            </p>
+
+            {% if error %}
+                <div class="login-alert">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="login-user-message">
+                    You are logged in as {{ app.user.userIdentifier }}.
+                    <a href="{{ logout_path() }}">Logout</a>
+                </div>
+            {% endif %}
+
+            <form method="post">
+
+                <div class="login-field">
+                    <label for="username">Email Address</label>
+
+                    <input
+                        type="email"
+                        value="{{ last_username }}"
+                        name="_username"
+                        id="username"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <div class="login-field">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        name="_password"
+                        id="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    data-controller="csrf-protection"
+                    value="{{ csrf_token('authenticate') }}"
+                >
+
+                <button class="login-button" type="submit">
+                    SIGN IN
+                </button>
+
+            </form>
+
+            <div class="register-text">
+                Don't have an account?
+                <a href="{{ path('app_register') }}">Register here</a>
             </div>
-        {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
+            <div class="login-footer-text">
+                © {{ "now"|date("Y") }} Bill's Resort
             </div>
-        #}
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

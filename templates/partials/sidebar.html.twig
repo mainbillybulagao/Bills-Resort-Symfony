@@ -33,9 +33,15 @@
         REVIEWS
     </a>
 
-    <a href="{{ path('app_admin_website') }}"
-       class="{{ app.current_route == 'app_admin_website' ? 'active' : '' }}">
-        VIEW WEBSITE
+    <a href="{{ path('app_admin_profile') }}"
+       class="{{ app.current_route starts with 'app_admin_profile' ? 'active' : '' }}">
+        MY PROFILE
     </a>
+
+
+<a href="{{ path('app_home') }}" target="_blank">
+    VIEW WEBSITE
+</a>
+
 
 </aside>

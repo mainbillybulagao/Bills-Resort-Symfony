@@ -656,3 +656,29 @@ a {
     }
 
 }
+
+/* CUSTOMER LAYOUT FIX */
+
+.customer-layout {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.customer-layout .admin-content {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 30px 20px !important;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.customer-layout .customer-booking-page {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+}

@@ -1,0 +1,318 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    My Profile | Bill's Resort Admin
+{% endblock %}
+
+{% block body %}
+
+<style>
+    .profile-page {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 10px 0 40px;
+    }
+
+    .profile-heading {
+        margin-bottom: 30px;
+    }
+
+    .profile-heading h1 {
+        color: #124d57;
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+
+    .profile-heading p {
+        color: #687b7e;
+        font-size: 14px;
+    }
+
+    .profile-section {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        padding: 28px;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 12px rgba(18, 77, 87, 0.05);
+    }
+
+    .profile-section-header {
+        border-bottom: 1px solid #e3eded;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+    }
+
+    .profile-section-header h2 {
+        color: #124d57;
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .profile-form {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+    }
+
+    .profile-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .profile-field label {
+        color: #294f54;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .profile-field input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #cbdcde;
+        border-radius: 7px;
+        background: #ffffff;
+        color: #344f53;
+        font-family: inherit;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .profile-field input:focus {
+        outline: none;
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.10);
+    }
+
+    .profile-field input[readonly] {
+        background: #f0f5f5;
+        color: #607477;
+        cursor: not-allowed;
+    }
+
+    .profile-form-actions {
+        grid-column: 1 / -1;
+        margin-top: 5px;
+    }
+
+    .profile-btn {
+        border: none;
+        border-radius: 7px;
+        padding: 12px 22px;
+        background: #17606b;
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .profile-btn:hover {
+        background: #124d57;
+    }
+
+    .profile-alert {
+        padding: 13px 16px;
+        border-radius: 7px;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .profile-alert-success {
+        background: #e8f5ed;
+        color: #23633d;
+        border: 1px solid #c7e5d1;
+    }
+
+    .profile-alert-error {
+        background: #fcebea;
+        color: #a33a35;
+        border: 1px solid #f1cfcd;
+    }
+
+    @media (max-width: 650px) {
+        .profile-section {
+            padding: 20px;
+        }
+
+        .profile-form {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-heading h1 {
+            font-size: 23px;
+        }
+
+        .profile-form-actions {
+            grid-column: 1;
+        }
+
+        .profile-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="profile-page">
+
+    <div class="profile-heading">
+        <h1>MY PROFILE</h1>
+        <p>View and update your administrator account information.</p>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="profile-alert profile-alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="profile-alert profile-alert-error">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {# ACCOUNT INFORMATION #}
+    <div class="profile-section">
+
+        <div class="profile-section-header">
+            <h2>ACCOUNT INFORMATION</h2>
+        </div>
+
+        <form method="POST" action="{{ path('app_admin_profile_update') }}">
+
+            <input
+                type="hidden"
+                name="_token"
+                value="{{ csrf_token('update_admin_profile') }}"
+            >
+
+            <div class="profile-form">
+
+                <div class="profile-field">
+                    <label for="name">Full Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ user.name }}"
+                        maxlength="100"
+                        required
+                    >
+                </div>
+
+                <div class="profile-field">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ user.email }}"
+                        maxlength="180"
+                        required
+                    >
+                </div>
+
+                <div class="profile-field">
+                    <label for="account_role">Account Role</label>
+                    <input
+                        type="text"
+                        id="account_role"
+                        value="Administrator"
+                        readonly
+                    >
+                </div>
+
+                <div class="profile-field">
+                    <label for="account_status">Account Status</label>
+                    <input
+                        type="text"
+                        id="account_status"
+                        value="{{ user.status }}"
+                        readonly
+                    >
+                </div>
+
+                <div class="profile-form-actions">
+                    <button type="submit" class="profile-btn">
+                        UPDATE PROFILE
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    {# CHANGE PASSWORD #}
+    <div class="profile-section">
+
+        <div class="profile-section-header">
+            <h2>CHANGE PASSWORD</h2>
+        </div>
+
+        <form method="POST" action="{{ path('app_admin_change_password') }}">
+
+            <input
+                type="hidden"
+                name="_token"
+                value="{{ csrf_token('change_admin_password') }}"
+            >
+
+            <div class="profile-form">
+
+                <div class="profile-field">
+                    <label for="current_password">Current Password</label>
+                    <input
+                        type="password"
+                        id="current_password"
+                        name="current_password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <div class="profile-field">
+                    <label for="new_password">New Password</label>
+                    <input
+                        type="password"
+                        id="new_password"
+                        name="new_password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <div class="profile-field">
+                    <label for="confirm_password">Confirm New Password</label>
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <div class="profile-form-actions">
+                    <button type="submit" class="profile-btn">
+                        CHANGE PASSWORD
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

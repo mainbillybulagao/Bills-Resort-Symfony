@@ -14,7 +14,7 @@
 
     {% include 'partials/topbar.html.twig' %}
 
-    <div class="admin-layout">
+    <div class="admin-layout {% if is_granted('ROLE_CUSTOMER') and not is_granted('ROLE_STAFF') %}customer-layout{% endif %}">
 
         {% if is_granted('ROLE_ADMIN') %}
             {% include 'partials/sidebar.html.twig' %}

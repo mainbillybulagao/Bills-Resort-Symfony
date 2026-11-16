@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 #[Route('/user')]
 final class UserController extends AbstractController
 {
@@ -42,12 +44,15 @@ final class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
 
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $plainPassword
-            );
+            if (empty($plainPassword)) {
+                $this->addFlash('error', 'A password is required to create an account.');
 
-            $user->setPassword($hashedPassword);
+                return $this->redirectToRoute('app_user_new');
+            }
+
+            $user->setPassword(
+                $passwordHasher->hashPassword($user, $plainPassword)
+            );
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -89,13 +94,11 @@ final class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
 
+            // Only update the password if a new one was entered
             if (!empty($plainPassword)) {
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $plainPassword
+                $user->setPassword(
+                    $passwordHasher->hashPassword($user, $plainPassword)
                 );
-
-                $user->setPassword($hashedPassword);
             }
 
             $entityManager->flush();
@@ -118,15 +121,17 @@ final class UserController extends AbstractController
         User $user,
         EntityManagerInterface $entityManager
     ): Response {
-
         // Prevent Admin from deleting their own account
-$currentUser = $this->getUser();
+        $currentUser = $this->getUser();
 
-if ($currentUser instanceof User && $user->getId() === $currentUser->getId()) {
-    $this->addFlash('error', 'You cannot delete your own account.');
+        if (
+            $currentUser instanceof User
+            && $user->getId() === $currentUser->getId()
+        ) {
+            $this->addFlash('error', 'You cannot delete your own account.');
 
-    return $this->redirectToRoute('app_user_index');
-}
+            return $this->redirectToRoute('app_user_index');
+        }
 
         // Validate CSRF token
         if (!$this->isCsrfTokenValid(
@@ -136,22 +141,17 @@ if ($currentUser instanceof User && $user->getId() === $currentUser->getId()) {
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        // Check if the user has booking history
+        // Deactivate accounts with booking history
         if (!$user->getBookings()->isEmpty()) {
-
-            // Deactivate account instead of deleting
             $user->setStatus('Inactive');
-
             $entityManager->flush();
 
             $this->addFlash(
                 'success',
                 'User has booking history. Account was deactivated instead of deleted.'
             );
-
         } else {
-
-            // Permanently delete if no bookings exist
+            // Permanently delete accounts without booking history
             $entityManager->remove($user);
             $entityManager->flush();
 

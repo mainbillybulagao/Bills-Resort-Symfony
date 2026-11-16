@@ -1,13 +1,307 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Room{% endblock %}
+{% block title %}Edit Room | Bill's Resort Admin{% endblock %}
 
 {% block body %}
-    <h1>Edit Room</h1>
 
-    {{ include('room/_form.html.twig', {'button_label': 'Update'}) }}
+<style>
+    .edit-room-page {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding-bottom: 40px;
+    }
 
-    <a href="{{ path('app_room_index') }}">back to list</a>
+    .edit-room-header {
+        margin-bottom: 25px;
+    }
 
-    {{ include('room/_delete_form.html.twig') }}
+    .edit-room-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .edit-room-header p {
+        color: #718487;
+        font-size: 13px;
+    }
+
+    .edit-room-card {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 15px;
+        padding: 32px;
+        box-shadow: 0 5px 20px rgba(18, 77, 87, 0.07);
+    }
+
+    .edit-room-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 20px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #e5eeee;
+    }
+
+    .edit-room-card-header h2 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 21px;
+    }
+
+    .room-reference {
+        background: #e8f2f2;
+        color: #17606b;
+        padding: 8px 13px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* CURRENT IMAGE */
+
+    .current-room-image {
+        margin-bottom: 28px;
+    }
+
+    .current-room-image h3 {
+        color: #124d57;
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .current-room-image img {
+        width: 100%;
+        max-width: 350px;
+        height: 210px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #dce9e9;
+        display: block;
+    }
+
+    .no-room-image {
+        width: 100%;
+        max-width: 350px;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e8f2f2;
+        color: #17606b;
+        border-radius: 10px;
+        font-size: 13px;
+    }
+
+    /* FORM */
+
+    .edit-room-form form {
+        width: 100%;
+    }
+
+    .edit-room-form form > div {
+        margin-bottom: 20px;
+    }
+
+    .edit-room-form label {
+        display: block;
+        color: #40585b;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 9px;
+    }
+
+    .edit-room-form input:not([type="checkbox"]):not([type="file"]),
+    .edit-room-form select,
+    .edit-room-form textarea {
+        width: 100%;
+        min-height: 45px;
+        padding: 11px 13px;
+        border: 1px solid #d5e2e2;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #33494c;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 13px;
+        outline: none;
+        transition: 0.2s ease;
+    }
+
+    .edit-room-form textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .edit-room-form input:focus,
+    .edit-room-form select:focus,
+    .edit-room-form textarea:focus {
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.08);
+    }
+
+    .edit-room-form input[type="file"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px dashed #a8c4c9;
+        border-radius: 8px;
+        background: #f5f9f9;
+        color: #52686b;
+        font-size: 12px;
+    }
+
+    .edit-room-form .form-text {
+        color: #819295;
+        font-size: 11px;
+        margin-top: 6px;
+    }
+
+    .edit-room-form ul {
+        color: #b33b3b;
+        font-size: 11px;
+        margin-top: 6px;
+    }
+
+    /* BUTTONS */
+
+    .edit-room-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding-top: 25px;
+        margin-top: 25px;
+        border-top: 1px solid #e5eeee;
+    }
+
+    .edit-room-btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 21px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .edit-room-btn-save {
+        background: #17606b;
+        color: #ffffff;
+    }
+
+    .edit-room-btn-save:hover {
+        background: #124d57;
+        transform: translateY(-2px);
+    }
+
+    .edit-room-btn-back {
+        background: #e8f2f2;
+        color: #17606b;
+    }
+
+    .edit-room-btn-back:hover {
+        background: #d5e8e8;
+    }
+
+    .edit-room-delete {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    @media (max-width: 600px) {
+        .edit-room-card {
+            padding: 20px;
+        }
+
+        .edit-room-header h1 {
+            font-size: 26px;
+        }
+
+        .edit-room-actions {
+            flex-direction: column;
+        }
+
+        .edit-room-actions a,
+        .edit-room-actions button {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="edit-room-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="edit-room-header">
+        <h1>Edit Room</h1>
+        <p>Update the room information and details of Bill's Resort.</p>
+    </div>
+
+
+    <!-- EDIT ROOM CARD -->
+
+    <div class="edit-room-card">
+
+        <div class="edit-room-card-header">
+
+            <h2>Room Information</h2>
+
+            <span class="room-reference">
+                ROOM #{{ room.id }}
+            </span>
+
+        </div>
+
+
+        <!-- CURRENT ROOM IMAGE -->
+
+        <div class="current-room-image">
+
+            <h3>Current Room Image</h3>
+
+            {% if room.image %}
+                <img
+                    src="{{ asset('images/' ~ room.image) }}"
+                    alt="{{ room.roomName }}"
+                >
+            {% else %}
+                <div class="no-room-image">
+                    No room image available
+                </div>
+            {% endif %}
+
+        </div>
+
+
+        <!-- EDIT FORM -->
+
+        <div class="edit-room-form">
+
+            {{ form_start(form) }}
+
+                {{ include('room/_form.html.twig', {'button_label': 'SAVE CHANGES'}) }}
+
+                <div class="edit-room-actions">
+
+                    <a href="{{ path('app_room_index') }}" class="edit-room-btn edit-room-btn-back">
+                        BACK TO ROOMS
+                    </a>
+
+                </div>
+
+            {{ form_end(form) }}
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

@@ -38,15 +38,43 @@
 
         <!-- NAVIGATION -->
         <nav class="navbar">
+
             <a href="#home">HOME</a>
             <a href="#about">ABOUT US</a>
             <a href="#rooms">ROOMS</a>
             <a href="#gallery">GALLERY</a>
             <a href="#contact">CONTACT US</a>
 
+            {% if is_granted('ROLE_ADMIN') %}
+
+                <a href="{{ path('app_admin') }}" class="book-btn">
+                    ADMIN DASHBOARD
+                </a>
+
+            {% elseif is_granted('ROLE_STAFF') %}
+
+                <a href="{{ path('app_staff') }}" class="book-btn">
+                    STAFF DASHBOARD
+                </a>
+
+            {% elseif is_granted('ROLE_CUSTOMER') %}
+
+                <a href="{{ path('app_customer_booking_new') }}" class="book-btn">
+                    MY BOOKINGS
+                </a>
+
+            {% else %}
+
+                <a href="{{ path('app_login') }}" class="book-btn">
+                    LOGIN
+                </a>
+
+            {% endif %}
+
             <a href="{{ path('app_book_now') }}" class="book-btn">
                 BOOK NOW!
             </a>
+
         </nav>
 
     </header>
@@ -78,7 +106,7 @@
 
             <div class="hero-buttons">
 
-                <a href="{{ path('app_booking_new') }}" class="hero-btn">
+                <a href="{{ path('app_book_now') }}" class="hero-btn">
                     BOOK YOUR STAY
                 </a>
 
@@ -179,7 +207,7 @@
                         groups looking for a relaxing stay.
                     </p>
 
-                    <a href="{{ path('app_booking_new') }}" class="room-btn">
+                    <a href="{{ path('app_book_now') }}" class="room-btn">
                         BOOK NOW!
                     </a>
 
@@ -208,7 +236,7 @@
                         with a relaxing space for your stay.
                     </p>
 
-                    <a href="{{ path('app_booking_new') }}" class="room-btn">
+                    <a href="{{ path('app_book_now') }}" class="room-btn">
                         BOOK NOW!
                     </a>
 
@@ -237,7 +265,7 @@
                         guests who want a peaceful stay.
                     </p>
 
-                    <a href="{{ path('app_booking_new') }}" class="room-btn">
+                    <a href="{{ path('app_book_now') }}" class="room-btn">
                         BOOK NOW!
                     </a>
 
@@ -266,7 +294,7 @@
                         for a relaxing resort experience.
                     </p>
 
-                    <a href="{{ path('app_booking_new') }}" class="room-btn">
+                    <a href="{{ path('app_book_now') }}" class="room-btn">
                         BOOK NOW!
                     </a>
 
@@ -352,12 +380,33 @@
 
             <h2>Send Us a Message</h2>
 
-            <form method="POST" action="#contact">
+            <!-- SUCCESS MESSAGE -->
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <!-- ERROR MESSAGE -->
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <form method="POST" action="{{ path('app_home') }}">
+
+                <input
+                    type="hidden"
+                    name="_token"
+                    value="{{ csrf_token('contact_message') }}"
+                >
 
                 <input
                     type="text"
                     name="name"
                     placeholder="Name"
+                    maxlength="100"
                     required
                 >
 
@@ -365,6 +414,15 @@
                     type="email"
                     name="email"
                     placeholder="Email Address"
+                    maxlength="150"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="subject"
+                    placeholder="Subject"
+                    maxlength="150"
                     required
                 >
 
@@ -467,7 +525,7 @@
             <a href="#gallery">GALLERY</a>
             <a href="#contact">CONTACT US</a>
 
-            <a href="{{ path('app_booking_new') }}">
+            <a href="{{ path('app_book_now') }}">
                 BOOK NOW!
             </a>
 

@@ -1,40 +1,501 @@
-
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Bookings | Bill's Resort Admin
-{% endblock %}
+{% block title %}Bookings | Bill's Resort Admin{% endblock %}
 
 {% block body %}
 
-    <h1>BOOKINGS</h1>
+<style>
+    /* =====================================================
+       ADMIN BOOKINGS PAGE
+       ===================================================== */
 
-    <p>Manage all customer reservations from this page.</p>
+    .bookings-page {
+        width: 100%;
+        max-width: 1300px;
+        margin: 0 auto;
+    }
 
-    {# SUCCESS MESSAGES #}
+    /* PAGE HEADER */
+
+    .bookings-header {
+        margin-bottom: 30px;
+    }
+
+    .bookings-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .bookings-header p {
+        color: #64777a;
+        font-size: 14px;
+    }
+
+    /* FLASH MESSAGES */
+
+    .booking-alert {
+        padding: 14px 18px;
+        border-radius: 9px;
+        margin-bottom: 18px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .booking-alert.success {
+        background: #e5f5eb;
+        color: #247544;
+        border: 1px solid #b9e2c7;
+    }
+
+    .booking-alert.error {
+        background: #fceaea;
+        color: #a83232;
+        border: 1px solid #f0caca;
+    }
+
+    /* SUMMARY CARDS */
+
+    .booking-summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .summary-card {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        padding: 22px;
+        box-shadow: 0 4px 12px rgba(18, 77, 87, 0.05);
+    }
+
+    .summary-card h3 {
+        color: #718487;
+        font-size: 11px;
+        letter-spacing: 0.8px;
+        margin-bottom: 12px;
+    }
+
+    .summary-card p {
+        color: #124d57;
+        font-size: 29px;
+        font-weight: 700;
+    }
+
+    .summary-card.pending p {
+        color: #bd8129;
+    }
+
+    .summary-card.confirmed p {
+        color: #27804d;
+    }
+
+    .summary-card.rejected p {
+        color: #b74646;
+    }
+
+    /* MAIN BOOKING SECTION */
+
+    .booking-section {
+        background: #ffffff;
+        padding: 28px;
+        border-radius: 14px;
+        border: 1px solid #dce9e9;
+        box-shadow: 0 4px 15px rgba(18, 77, 87, 0.06);
+    }
+
+    .booking-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+    }
+
+    .booking-section-header h2 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 22px;
+    }
+
+    .booking-count {
+        background: #e8f2f2;
+        color: #17606b;
+        padding: 8px 13px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* SEARCH AND FILTER */
+
+    .booking-filters {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+    }
+
+    .booking-filters input,
+    .booking-filters select {
+        height: 43px;
+        padding: 0 14px;
+        border: 1px solid #d5e2e2;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #33494c;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        outline: none;
+    }
+
+    .booking-filters input {
+        flex: 1;
+        min-width: 230px;
+    }
+
+    .booking-filters select {
+        min-width: 160px;
+        cursor: pointer;
+    }
+
+    .booking-filters input:focus,
+    .booking-filters select:focus {
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.08);
+    }
+
+    /* TABLE */
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid #e4eded;
+        border-radius: 10px;
+    }
+
+    .admin-booking-table {
+        width: 100%;
+        min-width: 1150px;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .admin-booking-table thead {
+        background: #edf5f5;
+    }
+
+    .admin-booking-table th {
+        padding: 16px 14px;
+        color: #17606b;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        white-space: nowrap;
+    }
+
+    .admin-booking-table td {
+        padding: 16px 14px;
+        border-top: 1px solid #edf1f1;
+        color: #526568;
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    .admin-booking-table tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .admin-booking-table tbody tr:hover {
+        background: #f7fafa;
+    }
+
+    .booking-id {
+        color: #17606b;
+        font-weight: 700;
+    }
+
+    .booking-customer {
+        color: #263d40;
+        font-weight: 700;
+    }
+
+    .booking-price {
+        color: #17606b;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    /* STATUS BADGES */
+
+    .status-badge {
+        display: inline-block;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .status-pending {
+        background: #fff3dc;
+        color: #a66b16;
+    }
+
+    .status-confirmed {
+        background: #e2f4e8;
+        color: #247544;
+    }
+
+    .status-rejected {
+        background: #fbe7e7;
+        color: #ae3d3d;
+    }
+
+    .status-cancelled {
+        background: #eeeeee;
+        color: #626262;
+    }
+
+    /* ACTION BUTTONS */
+
+    .booking-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-width: 190px;
+    }
+
+    .booking-actions form {
+        display: inline-flex;
+        margin: 0;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 10px;
+        border: none;
+        border-radius: 6px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .edit-btn {
+        background: #e6f0f1;
+        color: #17606b;
+    }
+
+    .edit-btn:hover {
+        background: #cfe3e4;
+    }
+
+    .delete-btn {
+        background: #fbe7e7;
+        color: #ae3d3d;
+    }
+
+    .delete-btn:hover {
+        background: #f4d1d1;
+    }
+
+    .confirm-btn {
+        background: #e2f4e8;
+        color: #247544;
+    }
+
+    .confirm-btn:hover {
+        background: #c9e9d4;
+    }
+
+    .reject-btn {
+        background: #fff3dc;
+        color: #a66b16;
+    }
+
+    .reject-btn:hover {
+        background: #f8e5bd;
+    }
+
+    /* EMPTY STATE */
+
+    .no-data {
+        text-align: center;
+        padding: 65px 20px;
+        background: #f7fafa;
+        border: 1px dashed #c9dada;
+        border-radius: 12px;
+    }
+
+    .no-data h2 {
+        color: #17606b;
+        font-family: 'Lora', serif;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .no-data p {
+        color: #819295;
+        font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 1000px) {
+        .booking-summary {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 600px) {
+        .bookings-header h1 {
+            font-size: 26px;
+        }
+
+        .booking-section {
+            padding: 18px;
+        }
+
+        .booking-summary {
+            gap: 12px;
+        }
+
+        .summary-card {
+            padding: 17px;
+        }
+
+        .summary-card p {
+            font-size: 25px;
+        }
+
+        .booking-filters {
+            flex-direction: column;
+        }
+
+        .booking-filters input,
+        .booking-filters select {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="bookings-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="bookings-header">
+        <h1>Bookings Management</h1>
+        <p>Manage, review, and monitor all customer reservations at Bill's Resort.</p>
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
+        <div class="booking-alert success">
             {{ message }}
         </div>
     {% endfor %}
 
-    <div class="admin-section">
-
-        <div class="admin-section-header">
-            <h2>BOOKING MANAGEMENT</h2>
+    {% for message in app.flashes('error') %}
+        <div class="booking-alert error">
+            {{ message }}
         </div>
+    {% endfor %}
+
+
+    <!-- SUMMARY CARDS -->
+
+    {% set totalCount = bookings|length %}
+    {% set pendingCount = bookings|filter(b => b.status|lower == 'pending')|length %}
+    {% set confirmedCount = bookings|filter(b => b.status|lower == 'confirmed')|length %}
+    {% set rejectedCount = bookings|filter(b => b.status|lower == 'rejected')|length %}
+
+    <div class="booking-summary">
+
+        <div class="summary-card">
+            <h3>TOTAL BOOKINGS</h3>
+            <p>{{ totalCount }}</p>
+        </div>
+
+        <div class="summary-card pending">
+            <h3>PENDING BOOKINGS</h3>
+            <p>{{ pendingCount }}</p>
+        </div>
+
+        <div class="summary-card confirmed">
+            <h3>CONFIRMED BOOKINGS</h3>
+            <p>{{ confirmedCount }}</p>
+        </div>
+
+        <div class="summary-card rejected">
+            <h3>REJECTED BOOKINGS</h3>
+            <p>{{ rejectedCount }}</p>
+        </div>
+
+    </div>
+
+
+    <!-- BOOKING MANAGEMENT SECTION -->
+
+    <div class="booking-section">
+
+        <div class="booking-section-header">
+            <h2>Booking Records</h2>
+
+            <span class="booking-count">
+                {{ totalCount }} RECORDS
+            </span>
+        </div>
+
 
         {% if bookings is empty %}
 
             <div class="no-data">
                 <h2>No Booking Data Yet</h2>
-                <p>Customer bookings will appear here.</p>
+                <p>Customer bookings will appear here once reservations are submitted.</p>
             </div>
 
         {% else %}
 
+            <!-- SEARCH AND FILTER -->
+
+            <div class="booking-filters">
+
+                <input
+                    type="text"
+                    id="bookingSearch"
+                    placeholder="Search ID, customer, email, or room..."
+                >
+
+                <select id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+
+            </div>
+
+
+            <!-- BOOKINGS TABLE -->
+
             <div class="table-responsive">
-                <table class="admin-table">
+
+                <table class="admin-booking-table">
 
                     <thead>
                         <tr>
@@ -50,66 +511,118 @@
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody id="bookingTableBody">
 
                         {% for booking in bookings %}
 
-                            <tr>
-                                <td>{{ booking.id }}</td>
+                            {% set currentStatus = booking.status|lower %}
 
-                                <td>{{ booking.customerName }}</td>
+                            <tr data-status="{{ currentStatus }}">
 
-                                <td>{{ booking.email }}</td>
+                                <td class="booking-id">
+                                    #{{ booking.id }}
+                                </td>
 
-                                <td>{{ booking.room.roomName }}</td>
-
-                                <td>{{ booking.checkIn|date('M d, Y') }}</td>
-
-                                <td>{{ booking.checkOut|date('M d, Y') }}</td>
-
-                                <td>₱{{ booking.totalPrice|number_format(2) }}</td>
+                                <td class="booking-customer">
+                                    {{ booking.customerName }}
+                                </td>
 
                                 <td>
-                                    {{ booking.status }}
+                                    {{ booking.email }}
+                                </td>
+
+                                <td>
+                                    {{ booking.room.roomName }}
+                                </td>
+
+                                <td>
+                                    {{ booking.checkIn|date('M d, Y') }}
+                                </td>
+
+                                <td>
+                                    {{ booking.checkOut|date('M d, Y') }}
+                                </td>
+
+                                <td class="booking-price">
+                                    ₱{{ booking.totalPrice|number_format(2) }}
+                                </td>
+
+                                <td>
+                                    <span class="status-badge status-{{ currentStatus }}">
+                                        {{ booking.status }}
+                                    </span>
                                 </td>
 
                                 <td>
 
-                                    {% if booking.status == 'Pending' %}
+                                    <div class="booking-actions">
 
-                                        <form method="post"
-                                              action="{{ path('app_admin_booking_confirm', {'id': booking.id}) }}"
-                                              style="display:inline;">
+                                        <a
+                                            href="{{ path('app_admin_booking_edit', {'id': booking.id}) }}"
+                                            class="action-btn edit-btn"
+                                        >
+                                            EDIT
+                                        </a>
 
-                                            <input type="hidden"
-                                                   name="_token"
-                                                   value="{{ csrf_token('confirm_booking_' ~ booking.id) }}">
+                                        <form
+                                            method="post"
+                                            action="{{ path('app_admin_booking_delete', {'id': booking.id}) }}"
+                                            onsubmit="return confirm('Are you sure you want to delete this booking?');"
+                                        >
 
-                                            <button type="submit">
-                                                CONFIRM
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token('delete_booking_' ~ booking.id) }}"
+                                            >
+
+                                            <button type="submit" class="action-btn delete-btn">
+                                                DELETE
                                             </button>
 
                                         </form>
 
-                                        <form method="post"
-                                              action="{{ path('app_admin_booking_reject', {'id': booking.id}) }}"
-                                              style="display:inline;">
 
-                                            <input type="hidden"
-                                                   name="_token"
-                                                   value="{{ csrf_token('reject_booking_' ~ booking.id) }}">
+                                        {% if currentStatus == 'pending' %}
 
-                                            <button type="submit">
-                                                REJECT
-                                            </button>
+                                            <form
+                                                method="post"
+                                                action="{{ path('app_admin_booking_confirm', {'id': booking.id}) }}"
+                                            >
 
-                                        </form>
+                                                <input
+                                                    type="hidden"
+                                                    name="_token"
+                                                    value="{{ csrf_token('confirm_booking_' ~ booking.id) }}"
+                                                >
 
-                                    {% else %}
+                                                <button type="submit" class="action-btn confirm-btn">
+                                                    CONFIRM
+                                                </button>
 
-                                        <span>No actions available</span>
+                                            </form>
 
-                                    {% endif %}
+
+                                            <form
+                                                method="post"
+                                                action="{{ path('app_admin_booking_reject', {'id': booking.id}) }}"
+                                            >
+
+                                                <input
+                                                    type="hidden"
+                                                    name="_token"
+                                                    value="{{ csrf_token('reject_booking_' ~ booking.id) }}"
+                                                >
+
+                                                <button type="submit" class="action-btn reject-btn">
+                                                    REJECT
+                                                </button>
+
+                                            </form>
+
+                                        {% endif %}
+
+                                    </div>
 
                                 </td>
 
@@ -117,13 +630,75 @@
 
                         {% endfor %}
 
+
+                        <tr id="noBookingResults" style="display: none;">
+                            <td colspan="9" style="text-align: center; padding: 25px;">
+                                No matching bookings found.
+                            </td>
+                        </tr>
+
                     </tbody>
 
                 </table>
+
             </div>
 
         {% endif %}
 
     </div>
+
+</div>
+
+
+<!-- SEARCH AND STATUS FILTER SCRIPT -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const searchInput = document.getElementById('bookingSearch');
+        const statusFilter = document.getElementById('statusFilter');
+        const tableBody = document.getElementById('bookingTableBody');
+        const noResults = document.getElementById('noBookingResults');
+
+        if (!searchInput || !statusFilter || !tableBody || !noResults) {
+            return;
+        }
+
+        function filterBookings() {
+
+            const searchText = searchInput.value.toLowerCase().trim();
+            const selectedStatus = statusFilter.value.toLowerCase();
+
+            const rows = tableBody.querySelectorAll('tr[data-status]');
+
+            let visibleCount = 0;
+
+            rows.forEach(function (row) {
+
+                const rowText = row.textContent.toLowerCase();
+                const rowStatus = row.dataset.status;
+
+                const matchesSearch = rowText.includes(searchText);
+
+                const matchesStatus =
+                    selectedStatus === '' || rowStatus === selectedStatus;
+
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+
+            });
+
+            noResults.style.display = visibleCount === 0 ? '' : 'none';
+        }
+
+        searchInput.addEventListener('input', filterBookings);
+        statusFilter.addEventListener('change', filterBookings);
+
+    });
+</script>
 
 {% endblock %}

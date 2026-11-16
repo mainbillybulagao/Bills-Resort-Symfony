@@ -18,9 +18,9 @@
         MESSAGES
     </a>
 
-    <a href="{{ path('app_review_index') }}"
-       class="{{ app.current_route starts with 'app_review_' ? 'active' : '' }}">
-        REVIEWS
+    <a href="{{ path('app_staff_profile') }}"
+       class="{{ app.current_route starts with 'app_staff_profile' or app.current_route == 'app_staff_change_password' ? 'active' : '' }}">
+        MY PROFILE
     </a>
 
     <a href="{{ path('app_home') }}">

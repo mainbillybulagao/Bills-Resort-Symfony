@@ -10,10 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/message')]
+#[IsGranted('ROLE_STAFF')]
 final class MessageController extends AbstractController
 {
+    // VIEW ALL MESSAGES
     #[Route(name: 'app_message_index', methods: ['GET'])]
     public function index(MessageRepository $messageRepository): Response
     {
@@ -22,18 +25,31 @@ final class MessageController extends AbstractController
         ]);
     }
 
+    // CREATE MESSAGE
     #[Route('/new', name: 'app_message_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
         $message = new Message();
+
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $message->setCreatedAt(new \DateTimeImmutable());
+
             $entityManager->persist($message);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Message created successfully.');
+
+            return $this->redirectToRoute(
+                'app_message_index',
+                [],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('message/new.html.twig', [
@@ -42,6 +58,7 @@ final class MessageController extends AbstractController
         ]);
     }
 
+    // VIEW MESSAGE DETAILS
     #[Route('/{id}', name: 'app_message_show', methods: ['GET'])]
     public function show(Message $message): Response
     {
@@ -50,16 +67,27 @@ final class MessageController extends AbstractController
         ]);
     }
 
+    // EDIT MESSAGE
     #[Route('/{id}/edit', name: 'app_message_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Message $message, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        Message $message,
+        EntityManagerInterface $entityManager
+    ): Response {
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Message updated successfully.');
+
+            return $this->redirectToRoute(
+                'app_message_index',
+                [],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('message/edit.html.twig', [
@@ -68,14 +96,29 @@ final class MessageController extends AbstractController
         ]);
     }
 
+    // DELETE MESSAGE
     #[Route('/{id}', name: 'app_message_delete', methods: ['POST'])]
-    public function delete(Request $request, Message $message, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$message->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($message);
-            $entityManager->flush();
+    public function delete(
+        Request $request,
+        Message $message,
+        EntityManagerInterface $entityManager
+    ): Response {
+        if (!$this->isCsrfTokenValid(
+            'delete' . $message->getId(),
+            $request->getPayload()->getString('_token')
+        )) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
+        $entityManager->remove($message);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Message deleted successfully.');
+
+        return $this->redirectToRoute(
+            'app_message_index',
+            [],
+            Response::HTTP_SEE_OTHER
+        );
     }
 }

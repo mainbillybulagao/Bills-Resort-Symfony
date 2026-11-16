@@ -1,4 +1,104 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+{{ form_start(form, {'attr': {'class': 'booking-create-form'}}) }}
+
+<style>
+    .booking-create-form {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .booking-create-form .form-group,
+    .booking-create-form > div {
+        min-width: 0;
+    }
+
+    .booking-create-form label {
+        display: block;
+        color: #294f54;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .booking-create-form input,
+    .booking-create-form select,
+    .booking-create-form textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #cbdcde;
+        border-radius: 7px;
+        background: #ffffff;
+        color: #344f53;
+        font-family: inherit;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .booking-create-form input:focus,
+    .booking-create-form select:focus,
+    .booking-create-form textarea:focus {
+        outline: none;
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.10);
+    }
+
+    .booking-create-form .form-error-message,
+    .booking-create-form ul {
+        color: #b33a35;
+        font-size: 12px;
+    }
+
+    .booking-create-form .booking-form-actions {
+        grid-column: 1 / -1;
+        margin-top: 10px;
+    }
+
+    .booking-create-form .booking-save-btn {
+        border: none;
+        border-radius: 7px;
+        padding: 13px 24px;
+        background: #17606b;
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .booking-create-form .booking-save-btn:hover {
+        background: #124d57;
+    }
+
+    @media (max-width: 650px) {
+        .booking-create-form {
+            grid-template-columns: 1fr;
+        }
+
+        .booking-create-form .booking-form-actions {
+            grid-column: 1;
+        }
+
+        .booking-create-form .booking-save-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+{{ form_row(form.customerName) }}
+{{ form_row(form.email) }}
+{{ form_row(form.contactNumber) }}
+{{ form_row(form.checkIn) }}
+{{ form_row(form.checkOut) }}
+{{ form_row(form.totalPrice) }}
+{{ form_row(form.status) }}
+{{ form_row(form.createdAt) }}
+{{ form_row(form.room) }}
+
+<div class="booking-form-actions">
+    <button type="submit" class="booking-save-btn">
+        {{ button_label|default('SAVE BOOKING') }}
+    </button>
+</div>
+
 {{ form_end(form) }}

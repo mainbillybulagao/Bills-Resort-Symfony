@@ -1,11 +1,104 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}New Booking{% endblock %}
+{% block title %}Create Booking | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Create new Booking</h1>
 
-    {{ include('booking/_form.html.twig') }}
+<style>
+    .booking-create-page {
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 10px 0 40px;
+    }
 
-    <a href="{{ path('app_booking_index') }}">back to list</a>
+    .booking-create-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .booking-create-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 27px;
+        margin: 0 0 8px;
+    }
+
+    .booking-create-header p {
+        color: #718386;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .booking-back-btn {
+        display: inline-block;
+        padding: 11px 18px;
+        background: #eaf2f2;
+        color: #17606b;
+        text-decoration: none;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .booking-back-btn:hover {
+        background: #dce9e9;
+    }
+
+    .booking-create-card {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 3px 12px rgba(18, 77, 87, 0.05);
+    }
+
+    .booking-create-card h2 {
+        color: #124d57;
+        font-size: 17px;
+        border-bottom: 1px solid #e3eded;
+        padding-bottom: 16px;
+        margin: 0 0 25px;
+    }
+
+    @media (max-width: 650px) {
+        .booking-create-card {
+            padding: 20px;
+        }
+
+        .booking-create-header h1 {
+            font-size: 23px;
+        }
+    }
+</style>
+
+<div class="booking-create-page">
+
+    <div class="booking-create-header">
+        <div>
+            <h1>CREATE NEW BOOKING</h1>
+            <p>Enter the customer's reservation information below.</p>
+        </div>
+
+        <a href="{{ path('app_booking_index') }}" class="booking-back-btn">
+            BACK TO BOOKINGS
+        </a>
+    </div>
+
+    <div class="booking-create-card">
+
+        <h2>BOOKING INFORMATION</h2>
+
+        {{ include('booking/_form.html.twig', {
+            'button_label': 'CREATE BOOKING'
+        }) }}
+
+    </div>
+
+</div>
+
 {% endblock %}

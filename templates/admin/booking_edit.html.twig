@@ -1,0 +1,301 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Booking | Bill's Resort Admin{% endblock %}
+
+{% block body %}
+
+<style>
+    /* =====================================================
+       EDIT BOOKING PAGE
+       ===================================================== */
+
+    .edit-booking-page {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    /* PAGE HEADER */
+
+    .edit-booking-header {
+        margin-bottom: 30px;
+    }
+
+    .edit-booking-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .edit-booking-header p {
+        color: #64777a;
+        font-size: 14px;
+    }
+
+    /* ERROR MESSAGE */
+
+    .booking-error {
+        padding: 14px 18px;
+        margin-bottom: 20px;
+        border-radius: 9px;
+        background: #fceaea;
+        border: 1px solid #f0caca;
+        color: #a83232;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* FORM CARD */
+
+    .edit-booking-card {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 15px;
+        padding: 32px;
+        box-shadow: 0 4px 18px rgba(18, 77, 87, 0.07);
+    }
+
+    /* CARD HEADER */
+
+    .edit-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        padding-bottom: 22px;
+        margin-bottom: 28px;
+        border-bottom: 1px solid #e6eeee;
+    }
+
+    .edit-card-header h2 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 22px;
+    }
+
+    .booking-reference {
+        color: #17606b;
+        background: #e8f2f2;
+        padding: 8px 13px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* FORM LAYOUT */
+
+    .admin-form-container form {
+        width: 100%;
+    }
+
+    .admin-form-container form > div {
+        margin-bottom: 20px;
+    }
+
+    .admin-form-container label {
+        display: block;
+        color: #40585b;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 9px;
+    }
+
+    .admin-form-container input:not([type="checkbox"]),
+    .admin-form-container select,
+    .admin-form-container textarea {
+        width: 100%;
+        min-height: 45px;
+        padding: 11px 13px;
+        border: 1px solid #d5e2e2;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #33494c;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 13px;
+        outline: none;
+        transition: 0.2s ease;
+    }
+
+    .admin-form-container input:focus,
+    .admin-form-container select:focus,
+    .admin-form-container textarea:focus {
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.08);
+    }
+
+    .admin-form-container input[type="checkbox"] {
+        margin-right: 8px;
+    }
+
+    .admin-form-container .form-error-message,
+    .admin-form-container ul {
+        color: #b33b3b;
+        font-size: 11px;
+        margin-top: 6px;
+    }
+
+    .admin-form-container .form-text {
+        color: #819295;
+        font-size: 11px;
+        margin-top: 6px;
+    }
+
+    /* FORM ACTIONS */
+
+    .admin-form-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding-top: 25px;
+        margin-top: 30px;
+        border-top: 1px solid #e6eeee;
+    }
+
+    .save-booking-btn,
+    .cancel-booking-btn,
+    .back-bookings-btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 21px;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+        text-decoration: none;
+    }
+
+    .save-booking-btn {
+        background: #17606b;
+        color: #ffffff;
+    }
+
+    .save-booking-btn:hover {
+        background: #124d57;
+        transform: translateY(-2px);
+    }
+
+    .cancel-booking-btn,
+    .back-bookings-btn {
+        background: #e8f2f2;
+        color: #17606b;
+    }
+
+    .cancel-booking-btn:hover,
+    .back-bookings-btn:hover {
+        background: #d5e8e8;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 600px) {
+        .edit-booking-header h1 {
+            font-size: 26px;
+        }
+
+        .edit-booking-card {
+            padding: 20px;
+        }
+
+        .edit-card-header h2 {
+            font-size: 19px;
+        }
+
+        .admin-form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .admin-form-actions button,
+        .admin-form-actions a {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="edit-booking-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="edit-booking-header">
+        <h1>Edit Booking</h1>
+        <p>Update and manage the customer's reservation information.</p>
+    </div>
+
+
+    <!-- ERROR MESSAGES -->
+
+    {% for message in app.flashes('error') %}
+        <div class="booking-error">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+
+    <!-- EDIT BOOKING FORM -->
+
+    <div class="edit-booking-card">
+
+        <div class="edit-card-header">
+
+            <h2>Booking Information</h2>
+
+            <span class="booking-reference">
+                BOOKING #{{ booking.id }}
+            </span>
+
+        </div>
+
+
+        <div class="admin-form-container">
+
+            {{ form_start(form) }}
+
+                {{ form_row(form.customerName) }}
+
+                {{ form_row(form.email) }}
+
+                {{ form_row(form.contactNumber) }}
+
+                {{ form_row(form.checkIn) }}
+
+                {{ form_row(form.checkOut) }}
+
+                {{ form_row(form.status) }}
+
+                {{ form_row(form.room) }}
+
+
+                <!-- FORM BUTTONS -->
+
+                <div class="admin-form-actions">
+
+                    <button type="submit" class="save-booking-btn">
+                        SAVE CHANGES
+                    </button>
+
+                    <a
+                        href="{{ path('app_admin_bookings') }}"
+                        class="cancel-booking-btn"
+                    >
+                        CANCEL
+                    </a>
+
+                </div>
+
+            {{ form_end(form) }}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

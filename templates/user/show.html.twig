@@ -1,46 +1,248 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}View User | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ user.name }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ user.status }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<style>
+    .view-user-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+    .view-user-header {
+        margin-bottom: 25px;
+    }
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+    .view-user-header h1 {
+        color: #124d57;
+        font-family: "Lora", serif;
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
 
-    {{ include('user/_delete_form.html.twig') }}
+    .view-user-header p {
+        color: #647779;
+        font-size: 14px;
+    }
+
+    .view-user-card {
+        background: #fff;
+        padding: 35px;
+        border-radius: 12px;
+        border: 1px solid #dce9e9;
+        box-shadow: 0 4px 18px rgba(18, 77, 87, 0.10);
+    }
+
+    .view-user-card h2 {
+        color: #17606b;
+        font-size: 19px;
+        margin-bottom: 22px;
+    }
+
+    .user-details-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .user-details-table th,
+    .user-details-table td {
+        padding: 16px 12px;
+        border-bottom: 1px solid #e5eeee;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .user-details-table th {
+        width: 35%;
+        color: #124d57;
+        font-weight: 700;
+    }
+
+    .user-details-table td {
+        color: #526466;
+        overflow-wrap: anywhere;
+    }
+
+    .user-role {
+        display: inline-block;
+        padding: 6px 12px;
+        margin: 2px;
+        border-radius: 20px;
+        background: #dce9e9;
+        color: #124d57;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .user-status {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .user-status.active {
+        background: #e2f3e8;
+        color: #237342;
+    }
+
+    .user-status.inactive {
+        background: #fce7e7;
+        color: #a33a3a;
+    }
+
+    .user-status.other {
+        background: #f0eeee;
+        color: #666;
+    }
+
+    .view-user-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .view-user-btn {
+        display: inline-block;
+        padding: 12px 22px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .view-user-back {
+        background: #e7eeee;
+        color: #124d57;
+    }
+
+    .view-user-edit {
+        background: #17606b;
+        color: #fff;
+    }
+
+    .view-user-back:hover {
+        background: #dce9e9;
+    }
+
+    .view-user-edit:hover {
+        background: #124d57;
+    }
+
+    .view-user-delete {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e3eded;
+    }
+
+    @media (max-width: 600px) {
+        .view-user-card {
+            padding: 20px;
+        }
+
+        .user-details-table th,
+        .user-details-table td {
+            padding: 12px 6px;
+            font-size: 12px;
+        }
+    }
+</style>
+
+<div class="view-user-page">
+
+    <div class="view-user-header">
+        <h1>USER DETAILS</h1>
+        <p>View the account information and access details.</p>
+    </div>
+
+    <div class="view-user-card">
+
+        <h2>ACCOUNT INFORMATION</h2>
+
+        <table class="user-details-table">
+            <tbody>
+
+                <tr>
+                    <th>USER ID</th>
+                    <td>{{ user.id }}</td>
+                </tr>
+
+                <tr>
+                    <th>FULL NAME</th>
+                    <td>{{ user.name }}</td>
+                </tr>
+
+                <tr>
+                    <th>EMAIL ADDRESS</th>
+                    <td>{{ user.email }}</td>
+                </tr>
+
+                <tr>
+                    <th>USER ROLE</th>
+                    <td>
+                        {% for role in user.roles %}
+                            {% if role == 'ROLE_ADMIN' %}
+                                <span class="user-role">ADMIN</span>
+                            {% elseif role == 'ROLE_STAFF' %}
+                                <span class="user-role">STAFF</span>
+                            {% elseif role == 'ROLE_CUSTOMER' %}
+                                <span class="user-role">CUSTOMER</span>
+                            {% else %}
+                                <span class="user-role">{{ role|replace({'ROLE_': ''}) }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>ACCOUNT STATUS</th>
+                    <td>
+                        {% set status = user.status|lower %}
+
+                        <span class="user-status {{ status == 'active' ? 'active' : (status == 'inactive' ? 'inactive' : 'other') }}">
+                            {{ user.status|upper }}
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>PASSWORD</th>
+                    <td>Protected for security</td>
+                </tr>
+
+                <tr>
+                    <th>DATE CREATED</th>
+                    <td>
+                        {{ user.createdAt ? user.createdAt|date('F d, Y - h:i A') : 'Not available' }}
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="view-user-actions">
+
+            <a href="{{ path('app_user_index') }}" class="view-user-btn view-user-back">
+                BACK TO USERS
+            </a>
+
+            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="view-user-btn view-user-edit">
+                EDIT USER
+            </a>
+
+        </div>
+
+        <div class="view-user-delete">
+            {{ include('user/_delete_form.html.twig') }}
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

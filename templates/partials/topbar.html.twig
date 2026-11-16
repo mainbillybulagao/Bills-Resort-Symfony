@@ -10,6 +10,13 @@
     <div class="admin-user">
 
         {% if app.user %}
+
+            {% if is_granted('ROLE_CUSTOMER') %}
+                <a href="{{ path('app_review_new') }}" class="logout-btn">
+                    WRITE A REVIEW
+                </a>
+            {% endif %}
+
             <span>
                 Welcome, {{ app.user.name }}
             </span>
@@ -17,10 +24,13 @@
             <a href="{{ path('app_logout') }}" class="logout-btn">
                 LOGOUT
             </a>
+
         {% else %}
+
             <a href="{{ path('app_login') }}" class="logout-btn">
                 LOGIN
             </a>
+
         {% endif %}
 
     </div>

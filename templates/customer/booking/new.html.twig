@@ -5,82 +5,579 @@
 
 {% block body %}
 
-<div class="admin-section">
+<style>
+    .customer-booking-page {
+        max-width: 1200px;
+        margin: 35px auto;
+        padding: 25px;
+        color: #124d57;
+    }
 
-    <div class="admin-section-header">
-        <h2>BOOK YOUR STAY</h2>
+    .booking-heading {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .booking-heading span {
+        color: #17606b;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 3px;
+    }
+
+    .booking-heading h1 {
+        font-family: 'Lora', serif;
+        font-size: 36px;
+        margin: 10px 0;
+    }
+
+    .booking-heading p {
+        color: #64777a;
+        font-size: 15px;
+    }
+
+    .booking-section-title {
+        font-family: 'Lora', serif;
+        font-size: 25px;
+        margin-bottom: 10px;
+    }
+
+    .booking-section-description {
+        color: #64777a;
+        margin-bottom: 25px;
+    }
+
+    .room-selection-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .room-card {
+        display: block;
+        width: 100%;
+        padding: 0;
+        overflow: hidden;
+        border: 2px solid #dce9e9;
+        border-radius: 12px;
+        background: white;
+        text-align: left;
+        cursor: pointer;
+        transition: 0.2s ease;
+        color: #124d57;
+    }
+
+    .room-card:hover {
+        border-color: #17606b;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(18, 77, 87, 0.12);
+    }
+
+    .room-card.selected {
+        border: 3px solid #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.12);
+    }
+
+    .room-card img {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .room-image-placeholder {
+        height: 230px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #dce9e9;
+        color: #17606b;
+        font-size: 15px;
+    }
+
+    .room-card-content {
+        padding: 20px;
+    }
+
+    .room-card-content h3 {
+        font-family: 'Lora', serif;
+        font-size: 21px;
+        margin: 0 0 10px;
+    }
+
+    .room-description {
+        color: #64777a;
+        font-size: 14px;
+        line-height: 1.6;
+        min-height: 45px;
+    }
+
+    .room-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .room-price {
+        font-size: 21px;
+        font-weight: 700;
+        color: #17606b;
+    }
+
+    .room-price small {
+        font-size: 12px;
+        font-weight: 400;
+        color: #64777a;
+    }
+
+    .room-capacity {
+        font-size: 13px;
+        color: #64777a;
+    }
+
+    .room-select-label {
+        display: block;
+        margin-top: 15px;
+        padding: 10px;
+        background: #dce9e9;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .room-card.selected .room-select-label {
+        background: #17606b;
+        color: white;
+    }
+
+    .room-select-field {
+        margin-bottom: 35px;
+    }
+
+    .room-select-field label {
+        font-weight: 700;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .booking-form-section {
+        background: #f5f9f9;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid #dce9e9;
+    }
+
+    .booking-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .booking-field {
+        margin-bottom: 18px;
+    }
+
+    .booking-field label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .booking-field input,
+    .booking-field select,
+    .booking-field textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        border: 1px solid #c5d8da;
+        border-radius: 6px;
+        background: white;
+        font-size: 14px;
+    }
+
+    .booking-field input:focus {
+        outline: none;
+        border-color: #17606b;
+    }
+
+    .booking-field input[readonly] {
+        background: #eaf1f1;
+        cursor: not-allowed;
+    }
+
+    .booking-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+
+    .booking-submit,
+    .booking-back {
+        display: inline-block;
+        padding: 13px 22px;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .booking-submit {
+        background: #17606b;
+        color: white;
+    }
+
+    .booking-submit:hover {
+        background: #124d57;
+    }
+
+    .booking-back {
+        background: #dce9e9;
+        color: #124d57;
+    }
+
+    .booking-error {
+        color: #b42318;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .booking-alert {
+        padding: 13px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+    }
+
+    .booking-alert.success {
+        background: #e3f5e8;
+        color: #216e39;
+    }
+
+    .booking-alert.error {
+        background: #fde8e7;
+        color: #a32121;
+    }
+
+    .no-rooms {
+        padding: 25px;
+        background: #f5f9f9;
+        border-radius: 8px;
+        text-align: center;
+        color: #64777a;
+    }
+
+    @media (max-width: 700px) {
+        .customer-booking-page {
+            padding: 15px;
+            margin: 15px auto;
+        }
+
+        .booking-heading h1 {
+            font-size: 28px;
+        }
+
+        .room-selection-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .booking-form-grid {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .booking-form-section {
+            padding: 20px;
+        }
+
+        .booking-actions {
+            flex-direction: column;
+        }
+
+        .booking-submit,
+        .booking-back {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+</style>
+
+<div class="customer-booking-page">
+
+    <!-- PAGE HEADING -->
+    <div class="booking-heading">
+        <span>WELCOME TO BILL'S RESORT</span>
+        <h1>BOOK YOUR STAY</h1>
+        <p>Choose your preferred room and complete your reservation details.</p>
     </div>
 
-    <p>Welcome to Bill's Resort! Complete the form below to request your room reservation.</p>
-
+    <!-- FLASH MESSAGES -->
     {% for message in app.flashes('success') %}
-        <p class="success-message">{{ message }}</p>
+        <div class="booking-alert success">
+            {{ message }}
+        </div>
     {% endfor %}
 
     {% for message in app.flashes('error') %}
-        <p class="error-message">{{ message }}</p>
+        <div class="booking-alert error">
+            {{ message }}
+        </div>
     {% endfor %}
 
-    {{ form_start(form) }}
+    <!-- ROOM SELECTION -->
+    <h2 class="booking-section-title">Choose Your Room</h2>
 
-        <div class="form-group">
-            {{ form_label(form.customerName) }}
-            {{ form_widget(form.customerName, {
-                attr: {class: 'form-control', readonly: true}
-            }) }}
-            {{ form_errors(form.customerName) }}
+    <p class="booking-section-description">
+        Explore our available room options and select the one you prefer.
+    </p>
+
+    {% if rooms is not empty %}
+
+        <div class="room-selection-grid">
+
+            {% for room in rooms %}
+
+                <button
+                    type="button"
+                    class="room-card"
+                    data-room-id="{{ room.id }}"
+                    aria-pressed="false"
+                >
+
+                    {% if room.image %}
+                        <img
+                            src="{{ asset('images/' ~ room.image) }}"
+                            alt="{{ room.roomName }}"
+                        >
+                    {% else %}
+                        <div class="room-image-placeholder">
+                            Room picture not available
+                        </div>
+                    {% endif %}
+
+                    <div class="room-card-content">
+
+                        <h3>{{ room.roomName }}</h3>
+
+                        <p class="room-description">
+                            {{ room.description }}
+                        </p>
+
+                        <div class="room-details">
+
+                            <div class="room-price">
+                                ₱{{ room.price|number_format(2, '.', ',') }}
+                                <small>/ night</small>
+                            </div>
+
+                            <div class="room-capacity">
+                                <span>Maximum {{ room.capacity }} guests</span>
+                            </div>
+
+                        </div>
+
+                        <span class="room-select-label">
+                            SELECT THIS ROOM
+                        </span>
+
+                    </div>
+
+                </button>
+
+            {% endfor %}
+
         </div>
 
-        <div class="form-group">
-            {{ form_label(form.email) }}
-            {{ form_widget(form.email, {
-                attr: {class: 'form-control', readonly: true}
-            }) }}
-            {{ form_errors(form.email) }}
+    {% else %}
+
+        <div class="no-rooms">
+            No rooms are currently available. Please contact the resort.
         </div>
 
-        <div class="form-group">
-            {{ form_label(form.contactNumber) }}
-            {{ form_widget(form.contactNumber, {
-                attr: {class: 'form-control', placeholder: 'Enter your contact number'}
-            }) }}
-            {{ form_errors(form.contactNumber) }}
-        </div>
+    {% endif %}
 
-        <div class="form-group">
-            {{ form_label(form.room) }}
-            {{ form_widget(form.room, {
-                attr: {class: 'form-control'}
-            }) }}
-            {{ form_errors(form.room) }}
-        </div>
+    <!-- BOOKING FORM -->
+    <div class="booking-form-section">
 
-        <div class="form-group">
-            {{ form_label(form.checkIn) }}
-            {{ form_widget(form.checkIn, {
-                attr: {class: 'form-control'}
-            }) }}
-            {{ form_errors(form.checkIn) }}
-        </div>
+        <h2 class="booking-section-title">Reservation Details</h2>
 
-        <div class="form-group">
-            {{ form_label(form.checkOut) }}
-            {{ form_widget(form.checkOut, {
-                attr: {class: 'form-control'}
-            }) }}
-            {{ form_errors(form.checkOut) }}
-        </div>
+        <p class="booking-section-description">
+            Please complete your information to submit your booking request.
+        </p>
 
-        <button type="submit" class="admin-btn">
-            CONFIRM BOOKING
-        </button>
+        {{ form_start(form) }}
 
-        <a href="{{ path('app_home') }}" class="admin-btn">
-            BACK TO HOME
-        </a>
+            <!-- CUSTOMER INFORMATION -->
+            <div class="booking-form-grid">
 
-    {{ form_end(form) }}
+                <div class="booking-field">
+                    {{ form_label(form.customerName) }}
+
+                    {{ form_widget(form.customerName, {
+                        attr: {
+                            class: 'form-control',
+                            readonly: true
+                        }
+                    }) }}
+
+                    {{ form_errors(form.customerName) }}
+                </div>
+
+                <div class="booking-field">
+                    {{ form_label(form.email) }}
+
+                    {{ form_widget(form.email, {
+                        attr: {
+                            class: 'form-control',
+                            readonly: true
+                        }
+                    }) }}
+
+                    {{ form_errors(form.email) }}
+                </div>
+
+            </div>
+
+            <!-- CONTACT NUMBER -->
+            <div class="booking-field">
+                {{ form_label(form.contactNumber) }}
+
+                {{ form_widget(form.contactNumber, {
+                    attr: {
+                        class: 'form-control',
+                        placeholder: 'Enter your contact number'
+                    }
+                }) }}
+
+                {{ form_errors(form.contactNumber) }}
+            </div>
+
+            <!-- ROOM FIELD -->
+            <div class="booking-field room-select-field">
+
+                {{ form_label(form.room) }}
+
+                {{ form_widget(form.room, {
+                    attr: {
+                        class: 'form-control',
+                        id: 'room_select'
+                    }
+                }) }}
+
+                {{ form_errors(form.room) }}
+
+            </div>
+
+            <!-- BOOKING DATES -->
+            <div class="booking-form-grid">
+
+                <div class="booking-field">
+                    {{ form_label(form.checkIn) }}
+
+                    {{ form_widget(form.checkIn, {
+                        attr: {
+                            class: 'form-control'
+                        }
+                    }) }}
+
+                    {{ form_errors(form.checkIn) }}
+                </div>
+
+                <div class="booking-field">
+                    {{ form_label(form.checkOut) }}
+
+                    {{ form_widget(form.checkOut, {
+                        attr: {
+                            class: 'form-control'
+                        }
+                    }) }}
+
+                    {{ form_errors(form.checkOut) }}
+                </div>
+
+            </div>
+
+            <!-- FORM BUTTONS -->
+            <div class="booking-actions">
+
+                <button type="submit" class="booking-submit">
+                    CONFIRM BOOKING
+                </button>
+
+                <a href="{{ path('app_home') }}" class="booking-back">
+                    BACK TO HOME
+                </a>
+
+            </div>
+
+        {{ form_end(form) }}
+
+    </div>
 
 </div>
+
+<!-- ROOM CARD SELECTION -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const roomSelect = document.getElementById('booking_room')
+            || document.getElementById('room_select');
+
+        const roomCards = document.querySelectorAll('.room-card');
+
+        if (!roomSelect) {
+            return;
+        }
+
+        function updateSelectedRoom() {
+
+            roomCards.forEach(function (card) {
+
+                const isSelected = card.dataset.roomId === roomSelect.value;
+
+                card.classList.toggle('selected', isSelected);
+                card.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+
+                const label = card.querySelector('.room-select-label');
+
+                if (label) {
+                    label.textContent = isSelected
+                        ? 'ROOM SELECTED'
+                        : 'SELECT THIS ROOM';
+                }
+
+            });
+
+        }
+
+        roomCards.forEach(function (card) {
+
+            card.addEventListener('click', function () {
+
+                roomSelect.value = card.dataset.roomId;
+
+                roomSelect.dispatchEvent(new Event('change', {
+                    bubbles: true
+                }));
+
+                updateSelectedRoom();
+
+            });
+
+        });
+
+        roomSelect.addEventListener('change', updateSelectedRoom);
+
+        updateSelectedRoom();
+
+    });
+</script>
 
 {% endblock %}

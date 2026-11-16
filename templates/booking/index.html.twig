@@ -1,49 +1,313 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Booking index{% endblock %}
+{% block title %}Booking Management | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Booking index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>CustomerName</th>
-                <th>Email</th>
-                <th>ContactNumber</th>
-                <th>CheckIn</th>
-                <th>CheckOut</th>
-                <th>TotalPrice</th>
-                <th>Status</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for booking in bookings %}
-            <tr>
-                <td>{{ booking.id }}</td>
-                <td>{{ booking.customerName }}</td>
-                <td>{{ booking.email }}</td>
-                <td>{{ booking.contactNumber }}</td>
-                <td>{{ booking.checkIn ? booking.checkIn|date('Y-m-d') : '' }}</td>
-                <td>{{ booking.checkOut ? booking.checkOut|date('Y-m-d') : '' }}</td>
-                <td>{{ booking.totalPrice }}</td>
-                <td>{{ booking.status }}</td>
-                <td>{{ booking.createdAt ? booking.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_booking_show', {'id': booking.id}) }}">show</a>
-                    <a href="{{ path('app_booking_edit', {'id': booking.id}) }}">edit</a>
-                </td>
-            </tr>
+<style>
+    .booking-page {
+        width: 100%;
+        margin: 0 auto;
+        padding: 10px 0 40px;
+    }
+
+    .booking-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 28px;
+    }
+
+    .booking-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 28px;
+        margin: 0 0 8px;
+    }
+
+    .booking-header p {
+        color: #718386;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .booking-button {
+        display: inline-block;
+        padding: 12px 20px;
+        background: #17606b;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+    .booking-button:hover {
+        background: #124d57;
+    }
+
+    .booking-table-container {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 3px 12px rgba(18, 77, 87, 0.05);
+        overflow-x: auto;
+    }
+
+    .booking-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 850px;
+    }
+
+    .booking-table th {
+        background: #eaf2f2;
+        color: #124d57;
+        padding: 15px 12px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .booking-table td {
+        padding: 15px 12px;
+        border-bottom: 1px solid #edf1f1;
+        color: #53676a;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .booking-table tbody tr:hover {
+        background: #f8fbfb;
+    }
+
+    .booking-status {
+        display: inline-block;
+        padding: 6px 11px;
+        border-radius: 20px;
+        background: #e5f3f3;
+        color: #17606b;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .booking-status.pending {
+        background: #fff3d9;
+        color: #946313;
+    }
+
+    .booking-status.confirmed {
+        background: #e4f4e9;
+        color: #287044;
+    }
+
+    .booking-status.rejected,
+    .booking-status.cancelled {
+        background: #fcebea;
+        color: #a33a35;
+    }
+
+    .booking-actions {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        white-space: nowrap;
+    }
+
+    .booking-actions a {
+        color: #17606b;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    .booking-actions a:hover {
+        text-decoration: underline;
+    }
+
+    .booking-empty {
+        text-align: center;
+        padding: 45px 20px;
+        color: #718386;
+    }
+
+    .booking-empty h3 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        margin-bottom: 10px;
+    }
+
+    .booking-empty p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 650px) {
+        .booking-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .booking-header h1 {
+            font-size: 24px;
+        }
+
+        .booking-table-container {
+            padding: 12px;
+        }
+    }
+</style>
+
+<div class="booking-page">
+
+    {# PAGE HEADER #}
+
+    <div class="booking-header">
+
+        <div>
+            <h1>
+                {% if is_granted('ROLE_CUSTOMER') and not is_granted('ROLE_STAFF') %}
+                    MY BOOKINGS
+                {% else %}
+                    BOOKING MANAGEMENT
+                {% endif %}
+            </h1>
+
+            <p>
+                View and manage Bill's Resort reservations.
+            </p>
+        </div>
+
+        {% if is_granted('ROLE_CUSTOMER') and not is_granted('ROLE_STAFF') %}
+
+            <a href="{{ path('app_customer_booking_new') }}" class="booking-button">
+                + BOOK A ROOM
+            </a>
+
         {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_booking_new') }}">Create new</a>
+            <a href="{{ path('app_booking_new') }}" class="booking-button">
+                + CREATE BOOKING
+            </a>
+
+        {% endif %}
+
+    </div>
+
+    {# BOOKINGS TABLE #}
+
+    <div class="booking-table-container">
+
+        <table class="booking-table">
+
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_STAFF') %}
+                        <th>ID</th>
+                        <th>CUSTOMER</th>
+                    {% endif %}
+
+                    <th>ROOM</th>
+                    <th>CHECK-IN</th>
+                    <th>CHECK-OUT</th>
+                    <th>TOTAL PRICE</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for booking in bookings %}
+
+                    {% set bookingStatus = booking.status|default('Pending')|lower %}
+
+                    <tr>
+
+                        {% if is_granted('ROLE_STAFF') %}
+                            <td>#{{ booking.id }}</td>
+                            <td>{{ booking.customerName }}</td>
+                        {% endif %}
+
+                        <td>
+                            {{ booking.room ? booking.room.roomName : 'No room assigned' }}
+                        </td>
+
+                        <td>
+                            {{ booking.checkIn ? booking.checkIn|date('M d, Y') : '—' }}
+                        </td>
+
+                        <td>
+                            {{ booking.checkOut ? booking.checkOut|date('M d, Y') : '—' }}
+                        </td>
+
+                        <td>
+                            ₱{{ booking.totalPrice|number_format(2, '.', ',') }}
+                        </td>
+
+                        <td>
+                            <span class="booking-status {{ bookingStatus }}">
+                                {{ booking.status|default('Pending')|capitalize }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="booking-actions">
+
+                                <a href="{{ path('app_booking_show', {'id': booking.id}) }}">
+                                    VIEW
+                                </a>
+
+                                {% if is_granted('ROLE_STAFF') %}
+                                    <a href="{{ path('app_booking_edit', {'id': booking.id}) }}">
+                                        EDIT
+                                    </a>
+                                {% endif %}
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+                        <td colspan="8">
+
+                            <div class="booking-empty">
+
+                                <h3>No Bookings Yet</h3>
+
+                                <p>
+                                    There are currently no reservations to display.
+                                </p>
+
+                                {% if is_granted('ROLE_CUSTOMER') and not is_granted('ROLE_STAFF') %}
+                                    <a href="{{ path('app_customer_booking_new') }}" class="booking-button">
+                                        BOOK YOUR FIRST ROOM
+                                    </a>
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
 {% endblock %}

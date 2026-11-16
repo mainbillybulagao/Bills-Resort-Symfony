@@ -1,30 +1,449 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Reviews | Bill's Resort Admin
-{% endblock %}
+{% block title %}Reviews | Bill's Resort Admin{% endblock %}
 
 {% block body %}
 
-    <h1>REVIEWS</h1>
+<style>
+    .reviews-page {
+        padding: 25px;
+        color: #124d57;
+    }
 
-    <p>
-        View and manage customer reviews from this page.
-    </p>
+    .reviews-header {
+        margin-bottom: 25px;
+    }
 
-    <div class="admin-section">
+    .reviews-header h1 {
+        font-family: "Lora", serif;
+        font-size: 30px;
+        color: #124d57;
+        margin-bottom: 8px;
+    }
 
-        <div class="admin-section-header">
-            <h2>REVIEW MANAGEMENT</h2>
+    .reviews-header p {
+        color: #647779;
+        font-size: 14px;
+    }
+
+    .reviews-alert {
+        padding: 13px 16px;
+        border-radius: 7px;
+        margin-bottom: 15px;
+        font-size: 13px;
+    }
+
+    .reviews-alert.success {
+        background: #e2f3e8;
+        color: #237342;
+    }
+
+    .reviews-summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .review-stat-card {
+        flex: 1;
+        min-width: 160px;
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-left: 5px solid #17606b;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 3px 12px rgba(18, 77, 87, 0.06);
+    }
+
+    .review-stat-card h3 {
+        color: #647779;
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .review-stat-card strong {
+        color: #124d57;
+        font-size: 26px;
+    }
+
+    .reviews-section {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(18, 77, 87, 0.07);
+    }
+
+    .reviews-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .reviews-section-header h2 {
+        color: #17606b;
+        font-size: 19px;
+        margin: 0;
+    }
+
+    .reviews-count {
+        background: #dce9e9;
+        color: #124d57;
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .reviews-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .reviews-table {
+        width: 100%;
+        min-width: 900px;
+        border-collapse: collapse;
+    }
+
+    .reviews-table thead {
+        background: #17606b;
+        color: #ffffff;
+    }
+
+    .reviews-table th {
+        padding: 15px 13px;
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .reviews-table td {
+        padding: 15px 13px;
+        border-bottom: 1px solid #e5eeee;
+        color: #526466;
+        font-size: 13px;
+        vertical-align: top;
+    }
+
+    .reviews-table tbody tr:hover {
+        background: #f5f9f9;
+    }
+
+    .review-customer {
+        color: #124d57;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .review-rating {
+        color: #d99b19;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .review-comment {
+        display: block;
+        min-width: 180px;
+        max-width: 300px;
+        line-height: 1.6;
+        white-space: normal;
+        overflow-wrap: break-word;
+    }
+
+    .review-date {
+        white-space: nowrap;
+        color: #718184;
+        font-size: 12px;
+    }
+
+    .review-status {
+        display: inline-block;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .review-status.pending {
+        background: #fff3d6;
+        color: #9a6a08;
+    }
+
+    .review-status.approved {
+        background: #e2f3e8;
+        color: #237342;
+    }
+
+    .review-status.rejected {
+        background: #fce7e7;
+        color: #a33a3a;
+    }
+
+    .review-action-form {
+        display: inline-block;
+        margin: 2px;
+    }
+
+    .review-action-btn {
+        border: none;
+        border-radius: 6px;
+        padding: 9px 12px;
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        color: #ffffff;
+    }
+
+    .review-approve {
+        background: #27834c;
+    }
+
+    .review-approve:hover {
+        background: #1d663a;
+    }
+
+    .review-reject {
+        background: #d48b20;
+    }
+
+    .review-reject:hover {
+        background: #ae6c10;
+    }
+
+    .review-delete {
+        background: #c0392b;
+    }
+
+    .review-delete:hover {
+        background: #962d22;
+    }
+
+    .reviews-empty {
+        text-align: center;
+        padding: 55px 20px;
+        background: #f7fafa;
+        border-radius: 9px;
+    }
+
+    .reviews-empty .empty-icon {
+        font-size: 38px;
+        margin-bottom: 12px;
+    }
+
+    .reviews-empty h2 {
+        color: #124d57;
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .reviews-empty p {
+        color: #718184;
+        font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+        .reviews-page {
+            padding: 15px;
+        }
+
+        .reviews-section {
+            padding: 17px;
+        }
+
+        .reviews-header h1 {
+            font-size: 25px;
+        }
+    }
+</style>
+
+<div class="reviews-page">
+
+    <div class="reviews-header">
+        <h1>REVIEWS</h1>
+        <p>View, approve, reject, and manage customer reviews.</p>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="reviews-alert success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="reviews-alert" style="background:#fce7e7; color:#a33a3a;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="reviews-summary">
+
+        <div class="review-stat-card">
+            <h3>TOTAL REVIEWS</h3>
+            <strong>{{ reviews|length }}</strong>
         </div>
 
-        <div class="no-data">
-            <h2>No Reviews Yet</h2>
-            <p>
-                Review functionality will be added later.
-            </p>
+        <div class="review-stat-card">
+            <h3>PENDING REVIEWS</h3>
+            <strong>{{ reviews|filter(r => r.status == 'Pending')|length }}</strong>
+        </div>
+
+        <div class="review-stat-card">
+            <h3>APPROVED REVIEWS</h3>
+            <strong>{{ reviews|filter(r => r.status == 'Approved')|length }}</strong>
         </div>
 
     </div>
+
+    <div class="reviews-section">
+
+        <div class="reviews-section-header">
+            <h2>REVIEW MANAGEMENT</h2>
+
+            <span class="reviews-count">
+                {{ reviews|length }} REVIEWS
+            </span>
+        </div>
+
+        {% if reviews is not empty %}
+
+            <div class="reviews-table-wrapper">
+
+                <table class="reviews-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>CUSTOMER NAME</th>
+                            <th>RATING</th>
+                            <th>COMMENT</th>
+                            <th>STATUS</th>
+                            <th>DATE SUBMITTED</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for review in reviews %}
+
+                            <tr>
+
+                                <td>{{ review.id }}</td>
+
+                                <td class="review-customer">
+                                    {{ review.customerName }}
+                                </td>
+
+                                <td class="review-rating">
+                                    {% for i in 1..5 %}
+                                        {% if i <= review.rating %}
+                                            &#9733;
+                                        {% else %}
+                                            &#9734;
+                                        {% endif %}
+                                    {% endfor %}
+                                    <br>
+                                    {{ review.rating }} / 5
+                                </td>
+
+                                <td>
+                                    <div class="review-comment">
+                                        {{ review.comment }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {% set status = review.status|lower %}
+
+                                    <span class="review-status {{ status == 'pending' ? 'pending' : (status == 'approved' ? 'approved' : 'rejected') }}">
+                                        {{ review.status|upper }}
+                                    </span>
+                                </td>
+
+                                <td class="review-date">
+                                    {{ review.createdAt ? review.createdAt|date('M d, Y') : 'N/A' }}
+                                </td>
+
+                                <td>
+
+                                    {% if review.status == 'Pending' %}
+
+                                        <form method="POST"
+                                              action="{{ path('app_admin_review_approve', {id: review.id}) }}"
+                                              class="review-action-form">
+
+                                            <input type="hidden"
+                                                   name="_token"
+                                                   value="{{ csrf_token('approve_review_' ~ review.id) }}">
+
+                                            <button type="submit" class="review-action-btn review-approve">
+                                                APPROVE
+                                            </button>
+
+                                        </form>
+
+                                        <form method="POST"
+                                              action="{{ path('app_admin_review_reject', {id: review.id}) }}"
+                                              class="review-action-form">
+
+                                            <input type="hidden"
+                                                   name="_token"
+                                                   value="{{ csrf_token('reject_review_' ~ review.id) }}">
+
+                                            <button type="submit" class="review-action-btn review-reject">
+                                                REJECT
+                                            </button>
+
+                                        </form>
+
+                                    {% endif %}
+
+                                    <form method="POST"
+                                          action="{{ path('app_admin_review_delete', {id: review.id}) }}"
+                                          class="review-action-form"
+                                          onsubmit="return confirm('Are you sure you want to delete this review? This action cannot be undone.');">
+
+                                        <input type="hidden"
+                                               name="_token"
+                                               value="{{ csrf_token('delete_review_' ~ review.id) }}">
+
+                                        <button type="submit" class="review-action-btn review-delete">
+                                            DELETE
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div class="reviews-empty">
+                <div class="empty-icon">&#9734;</div>
+                <h2>No Reviews Yet</h2>
+                <p>Customer reviews will appear here once submitted.</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
 
 {% endblock %}

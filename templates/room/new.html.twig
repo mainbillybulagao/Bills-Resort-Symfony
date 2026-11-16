@@ -1,11 +1,155 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Room{% endblock %}
+{% block title %}Add New Room | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Create new Room</h1>
 
-    {{ include('room/_form.html.twig') }}
+<style>
+    .new-room-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-    <a href="{{ path('app_room_index') }}">back to list</a>
+    .new-room-header {
+        margin-bottom: 25px;
+    }
+
+    .new-room-header h1 {
+        color: #124d57;
+        font-family: "Lora", serif;
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    .new-room-header p {
+        color: #647779;
+        font-size: 14px;
+    }
+
+    .new-room-card {
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(18, 77, 87, 0.10);
+        border: 1px solid #dce9e9;
+    }
+
+    .new-room-card h2 {
+        color: #17606b;
+        font-size: 19px;
+        margin-bottom: 25px;
+    }
+
+    .new-room-card label {
+        display: block;
+        color: #124d57;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .new-room-card input,
+    .new-room-card textarea,
+    .new-room-card select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #cbdada;
+        border-radius: 7px;
+        margin-bottom: 18px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .new-room-card input:focus,
+    .new-room-card textarea:focus,
+    .new-room-card select:focus {
+        outline: none;
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.10);
+    }
+
+    .new-room-card textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .new-room-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .save-room-btn,
+    .back-room-btn {
+        display: inline-block;
+        padding: 12px 22px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+    }
+
+    .save-room-btn {
+        background: #17606b;
+        color: #ffffff;
+    }
+
+    .save-room-btn:hover {
+        background: #124d57;
+    }
+
+    .back-room-btn {
+        background: #e7eeee;
+        color: #124d57;
+    }
+
+    .back-room-btn:hover {
+        background: #dce9e9;
+    }
+
+    @media (max-width: 600px) {
+        .new-room-card {
+            padding: 22px;
+        }
+
+        .new-room-actions {
+            flex-direction: column;
+        }
+
+        .save-room-btn,
+        .back-room-btn {
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="new-room-page">
+
+    <div class="new-room-header">
+        <h1>ADD NEW ROOM</h1>
+        <p>Add a new room to the Bill's Resort room management system.</p>
+    </div>
+
+    <div class="new-room-card">
+
+        <h2>ROOM INFORMATION</h2>
+
+        {{ include('room/_form.html.twig', {
+            'button_label': 'SAVE ROOM'
+        }) }}
+
+        <div class="new-room-actions">
+            <a href="{{ path('app_room_index') }}" class="back-room-btn">
+                BACK TO ROOMS
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

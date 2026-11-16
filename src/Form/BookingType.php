@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Booking;
 use App\Entity\Room;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,12 +27,7 @@ class BookingType extends AbstractType
             ->add('room', EntityType::class, [
                 'class' => Room::class,
                 'choice_label' => 'id',
-            ])
-            ->add('createdBy', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

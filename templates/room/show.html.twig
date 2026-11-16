@@ -1,46 +1,281 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Room{% endblock %}
+{% block title %}{{ room.roomName }} | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Room</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ room.id }}</td>
-            </tr>
-            <tr>
-                <th>RoomName</th>
-                <td>{{ room.roomName }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ room.description }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ room.price }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ room.image }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ room.status }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ room.createdAt ? room.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<style>
+    .room-view-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 10px 0 40px;
+    }
 
-    <a href="{{ path('app_room_index') }}">back to list</a>
+    .room-view-header {
+        margin-bottom: 25px;
+    }
 
-    <a href="{{ path('app_room_edit', {'id': room.id}) }}">edit</a>
+    .room-view-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
 
-    {{ include('room/_delete_form.html.twig') }}
+    .room-view-header p {
+        color: #718487;
+        font-size: 13px;
+    }
+
+    .room-view-card {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #dce9e9;
+        box-shadow: 0 5px 20px rgba(18, 77, 87, 0.08);
+    }
+
+    .room-image-container {
+        min-height: 400px;
+        background: #e8f2f2;
+    }
+
+    .room-image-container img {
+        width: 100%;
+        height: 100%;
+        min-height: 400px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .room-image-placeholder {
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #17606b;
+        font-size: 15px;
+    }
+
+    .room-details {
+        padding: 35px;
+    }
+
+    .room-status {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 20px;
+        background: #e5f3eb;
+        color: #27734a;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+
+    .room-details h2 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 27px;
+        margin-bottom: 15px;
+    }
+
+    .room-description {
+        color: #65797c;
+        font-size: 13px;
+        line-height: 1.8;
+        margin-bottom: 25px;
+        white-space: pre-line;
+    }
+
+    .room-price {
+        background: #f0f7f7;
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 22px;
+    }
+
+    .room-price small {
+        display: block;
+        color: #718487;
+        font-size: 11px;
+        margin-bottom: 7px;
+    }
+
+    .room-price strong {
+        color: #17606b;
+        font-size: 25px;
+        font-family: 'Lora', serif;
+    }
+
+    .room-information {
+        border-top: 1px solid #e5eeee;
+        padding-top: 18px;
+    }
+
+    .room-information p {
+        color: #52686b;
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .room-information strong {
+        color: #124d57;
+    }
+
+    .room-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 28px;
+    }
+
+    .room-btn {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 7px;
+        text-decoration: none;
+        border: none;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .room-btn-back {
+        background: #e8f2f2;
+        color: #17606b;
+    }
+
+    .room-btn-edit {
+        background: #17606b;
+        color: #ffffff;
+    }
+
+    .room-btn:hover {
+        opacity: 0.85;
+        transform: translateY(-2px);
+    }
+
+    .room-delete-form {
+        display: inline-block;
+        margin: 0;
+    }
+
+    .room-btn-delete {
+        background: #fceaea;
+        color: #a83232;
+    }
+
+    @media (max-width: 750px) {
+        .room-view-card {
+            grid-template-columns: 1fr;
+        }
+
+        .room-image-container,
+        .room-image-container img {
+            min-height: 260px;
+            max-height: 350px;
+        }
+
+        .room-details {
+            padding: 25px;
+        }
+
+        .room-view-header h1 {
+            font-size: 26px;
+        }
+    }
+</style>
+
+
+<div class="room-view-page">
+
+    <div class="room-view-header">
+        <h1>Room Details</h1>
+        <p>View the information and details of this resort room.</p>
+    </div>
+
+
+    <div class="room-view-card">
+
+        <!-- ROOM IMAGE -->
+
+        <div class="room-image-container">
+
+            {% if room.image %}
+                <img
+                    src="{{ asset('images/' ~ room.image) }}"
+                    alt="{{ room.roomName }}"
+                >
+            {% else %}
+                <div class="room-image-placeholder">
+                    No room image available
+                </div>
+            {% endif %}
+
+        </div>
+
+
+        <!-- ROOM INFORMATION -->
+
+        <div class="room-details">
+
+            <span class="room-status">
+                {{ room.status }}
+            </span>
+
+            <h2>{{ room.roomName }}</h2>
+
+            <p class="room-description">
+                {{ room.description ?: 'No room description available.' }}
+            </p>
+
+
+            <div class="room-price">
+                <small>ROOM PRICE</small>
+                <strong>₱{{ room.price|number_format(2, '.', ',') }}</strong>
+            </div>
+
+
+            <div class="room-information">
+
+                <p>
+                    <strong>Room ID:</strong>
+                    #{{ room.id }}
+                </p>
+
+                <p>
+                    <strong>Created:</strong>
+                    {{ room.createdAt ? room.createdAt|date('M d, Y') : 'Not available' }}
+                </p>
+
+            </div>
+
+
+            <!-- ACTION BUTTONS -->
+
+            <div class="room-actions">
+
+                <a href="{{ path('app_room_index') }}" class="room-btn room-btn-back">
+                    BACK TO ROOMS
+                </a>
+
+                <a href="{{ path('app_room_edit', {'id': room.id}) }}" class="room-btn room-btn-edit">
+                    EDIT ROOM
+                </a>
+
+                {{ include('room/_delete_form.html.twig') }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

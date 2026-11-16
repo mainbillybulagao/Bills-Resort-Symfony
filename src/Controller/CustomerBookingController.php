@@ -6,6 +6,7 @@ use App\Entity\Booking;
 use App\Entity\User;
 use App\Form\CustomerBookingType;
 use App\Repository\BookingRepository;
+use App\Repository\RoomRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,11 +21,15 @@ final class CustomerBookingController extends AbstractController
     #[Route('/booking/new', name: 'app_customer_booking_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        RoomRepository $roomRepository
     ): Response {
 
         /** @var User $user */
         $user = $this->getUser();
+
+        // Get all rooms from the database
+        $rooms = $roomRepository->findBy([], ['id' => 'ASC']);
 
         $booking = new Booking();
 
@@ -39,9 +44,9 @@ final class CustomerBookingController extends AbstractController
 
             // Check booking dates
             if (
-                !$booking->getCheckIn() ||
-                !$booking->getCheckOut() ||
-                $booking->getCheckOut() <= $booking->getCheckIn()
+                !$booking->getCheckIn()
+                || !$booking->getCheckOut()
+                || $booking->getCheckOut() <= $booking->getCheckIn()
             ) {
                 $this->addFlash(
                     'error',
@@ -50,6 +55,7 @@ final class CustomerBookingController extends AbstractController
 
                 return $this->render('customer/booking/new.html.twig', [
                     'form' => $form,
+                    'rooms' => $rooms,
                 ]);
             }
 
@@ -58,7 +64,7 @@ final class CustomerBookingController extends AbstractController
                 ->diff($booking->getCheckOut())
                 ->days;
 
-            // Calculate total price using the selected room
+            // Calculate total price using selected room
             $roomPrice = (float) $booking->getRoom()->getPrice();
             $totalPrice = $roomPrice * $nights;
 
@@ -73,19 +79,25 @@ final class CustomerBookingController extends AbstractController
             $entityManager->persist($booking);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Your booking has been submitted successfully!');
+            $this->addFlash(
+                'success',
+                'Your booking has been submitted successfully!'
+            );
 
             return $this->redirectToRoute('app_customer_bookings');
         }
 
         return $this->render('customer/booking/new.html.twig', [
             'form' => $form,
+            'rooms' => $rooms,
         ]);
     }
 
     #[Route('/my-bookings', name: 'app_customer_bookings', methods: ['GET'])]
-    public function myBookings(BookingRepository $bookingRepository): Response
-    {
+    public function myBookings(
+        BookingRepository $bookingRepository
+    ): Response {
+
         /** @var User $user */
         $user = $this->getUser();
 

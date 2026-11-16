@@ -1,13 +1,155 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Edit User | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+<style>
+    .edit-user-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+    .edit-user-header {
+        margin-bottom: 25px;
+    }
 
-    {{ include('user/_delete_form.html.twig') }}
+    .edit-user-header h1 {
+        color: #124d57;
+        font-family: "Lora", serif;
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    .edit-user-header p {
+        color: #647779;
+        font-size: 14px;
+    }
+
+    .edit-user-card {
+        background: #fff;
+        padding: 35px;
+        border-radius: 12px;
+        border: 1px solid #dce9e9;
+        box-shadow: 0 4px 18px rgba(18, 77, 87, 0.10);
+    }
+
+    .edit-user-card h2 {
+        color: #17606b;
+        font-size: 19px;
+        margin-bottom: 25px;
+    }
+
+    .edit-user-card label {
+        display: block;
+        color: #124d57;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .edit-user-card input,
+    .edit-user-card select,
+    .edit-user-card textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #cbdada;
+        border-radius: 7px;
+        margin-bottom: 18px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .edit-user-card input:focus,
+    .edit-user-card select:focus,
+    .edit-user-card textarea:focus {
+        outline: none;
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.10);
+    }
+
+    .edit-user-card button,
+    .edit-user-card .btn {
+        background: #17606b;
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        padding: 12px 22px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .edit-user-card button:hover,
+    .edit-user-card .btn:hover {
+        background: #124d57;
+    }
+
+    .edit-user-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .back-user-btn {
+        display: inline-block;
+        padding: 12px 20px;
+        background: #e7eeee;
+        color: #124d57;
+        text-decoration: none;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .back-user-btn:hover {
+        background: #dce9e9;
+    }
+
+    .edit-user-delete {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e3eded;
+    }
+
+    @media (max-width: 600px) {
+        .edit-user-card {
+            padding: 22px;
+        }
+    }
+</style>
+
+<div class="edit-user-page">
+
+    <div class="edit-user-header">
+        <h1>EDIT USER</h1>
+        <p>Update the account information and access details.</p>
+    </div>
+
+    <div class="edit-user-card">
+
+        <h2>ACCOUNT INFORMATION</h2>
+
+        {{ include('user/_form.html.twig', {
+            'button_label': 'SAVE CHANGES'
+        }) }}
+
+        <div class="edit-user-actions">
+            <a href="{{ path('app_user_index') }}" class="back-user-btn">
+                BACK TO USERS
+            </a>
+        </div>
+
+        <div class="edit-user-delete">
+            {{ include('user/_delete_form.html.twig') }}
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

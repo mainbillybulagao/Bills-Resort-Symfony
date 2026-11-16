@@ -47,7 +47,6 @@ security:
         # Admin and Staff pages
         - { path: ^/booking, roles: ROLE_STAFF }
         - { path: ^/message, roles: ROLE_STAFF }
-        - { path: ^/review, roles: ROLE_STAFF }
 
 when@test:
     security:

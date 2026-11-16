@@ -1,13 +1,140 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Booking{% endblock %}
+{% block title %}Edit Booking | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Edit Booking</h1>
 
-    {{ include('booking/_form.html.twig', {'button_label': 'Update'}) }}
+<style>
+    .booking-edit-page {
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 10px 0 40px;
+    }
 
-    <a href="{{ path('app_booking_index') }}">back to list</a>
+    .booking-edit-header {
+        margin-bottom: 25px;
+    }
 
-    {{ include('booking/_delete_form.html.twig') }}
+    .booking-edit-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 27px;
+        margin: 0 0 8px;
+    }
+
+    .booking-edit-header p {
+        color: #718386;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .booking-edit-card {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        padding: 28px;
+        box-shadow: 0 3px 12px rgba(18, 77, 87, 0.05);
+    }
+
+    .booking-edit-card h2 {
+        color: #124d57;
+        font-size: 17px;
+        margin: 0 0 10px;
+    }
+
+    .booking-edit-card .description {
+        color: #718386;
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+
+    .booking-edit-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e3eded;
+    }
+
+    .booking-edit-btn {
+        display: inline-block;
+        padding: 11px 20px;
+        border-radius: 7px;
+        background: #17606b;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+    }
+
+    .booking-edit-btn:hover {
+        background: #124d57;
+        color: #ffffff;
+    }
+
+    .booking-edit-btn.back {
+        background: #eaf2f2;
+        color: #17606b;
+    }
+
+    .booking-edit-btn.back:hover {
+        background: #dce9e9;
+    }
+
+    @media (max-width: 600px) {
+        .booking-edit-card {
+            padding: 20px;
+        }
+
+        .booking-edit-header h1 {
+            font-size: 23px;
+        }
+
+        .booking-edit-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .booking-edit-actions a {
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="booking-edit-page">
+
+    <div class="booking-edit-header">
+        <h1>EDIT BOOKING</h1>
+        <p>Update the customer's reservation information.</p>
+    </div>
+
+    <div class="booking-edit-card">
+
+        <h2>RESERVATION INFORMATION</h2>
+
+        <p class="description">
+            Review the booking details and make the necessary changes.
+        </p>
+
+        {{ include('booking/_form.html.twig', {'button_label': 'UPDATE BOOKING'}) }}
+
+        <div class="booking-edit-actions">
+
+            <a href="{{ path('app_booking_index') }}" class="booking-edit-btn back">
+                BACK TO BOOKINGS
+            </a>
+
+            {{ include('booking/_delete_form.html.twig') }}
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

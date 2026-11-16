@@ -1,11 +1,111 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}New User{% endblock %}
+{% block title %}Create Account | Bill's Resort{% endblock %}
 
 {% block body %}
-    <h1>Create new User</h1>
 
-    {{ include('user/_form.html.twig') }}
+<style>
+    .create-user-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+    .create-user-header {
+        margin-bottom: 25px;
+    }
+
+    .create-user-header h1 {
+        color: #124d57;
+        font-family: "Lora", serif;
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    .create-user-header p {
+        color: #647779;
+        font-size: 14px;
+    }
+
+    .create-user-card {
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 12px;
+        border: 1px solid #dce9e9;
+        box-shadow: 0 4px 18px rgba(18, 77, 87, 0.10);
+    }
+
+    .create-user-card h2 {
+        color: #17606b;
+        font-size: 19px;
+        margin-bottom: 10px;
+    }
+
+    .create-user-card .form-description {
+        color: #718184;
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+
+    .create-user-alert {
+        padding: 13px 16px;
+        border-radius: 7px;
+        margin-bottom: 15px;
+        font-size: 13px;
+    }
+
+    .create-user-alert.success {
+        background: #e2f3e8;
+        color: #237342;
+        border: 1px solid #b8dfc4;
+    }
+
+    .create-user-alert.error {
+        background: #fce7e7;
+        color: #a33a3a;
+        border: 1px solid #efc1c1;
+    }
+
+    @media (max-width: 600px) {
+        .create-user-card {
+            padding: 22px;
+        }
+    }
+</style>
+
+<div class="create-user-page">
+
+    <div class="create-user-header">
+        <h1>CREATE NEW ACCOUNT</h1>
+        <p>Create an administrator, staff, or customer account for Bill's Resort.</p>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="create-user-alert success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="create-user-alert error">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="create-user-card">
+
+        <h2>ACCOUNT INFORMATION</h2>
+        <p class="form-description">
+            Complete the required information to register a new account.
+        </p>
+
+        {{ include('user/_form.html.twig', {
+            'button_label': 'CREATE ACCOUNT'
+        }) }}
+
+    </div>
+
+</div>
+
 {% endblock %}

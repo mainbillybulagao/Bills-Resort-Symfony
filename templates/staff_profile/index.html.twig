@@ -1,0 +1,263 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    My Profile | Bill's Resort Staff
+{% endblock %}
+
+{% block body %}
+
+<style>
+    .staff-profile-page {
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 10px 0 40px;
+    }
+
+    .staff-profile-header {
+        margin-bottom: 25px;
+    }
+
+    .staff-profile-header h1 {
+        color: #124d57;
+        font-family: 'Lora', serif;
+        font-size: 27px;
+        margin: 0 0 8px;
+    }
+
+    .staff-profile-header p {
+        color: #718386;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .staff-profile-alert {
+        padding: 13px 16px;
+        border-radius: 7px;
+        margin-bottom: 15px;
+        font-size: 13px;
+    }
+
+    .staff-profile-alert.success {
+        background: #e8f5ed;
+        color: #267344;
+        border: 1px solid #cce8d5;
+    }
+
+    .staff-profile-alert.error {
+        background: #fff0f0;
+        color: #b43b3b;
+        border: 1px solid #f0cccc;
+    }
+
+    .staff-profile-card {
+        background: #ffffff;
+        border: 1px solid #dce9e9;
+        border-radius: 12px;
+        padding: 28px;
+        margin-bottom: 22px;
+        box-shadow: 0 3px 12px rgba(18, 77, 87, 0.05);
+    }
+
+    .staff-profile-card h2 {
+        color: #124d57;
+        font-size: 17px;
+        margin: 0 0 8px;
+    }
+
+    .staff-profile-card .card-description {
+        color: #718386;
+        font-size: 13px;
+        margin-bottom: 23px;
+    }
+
+    .staff-profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .staff-profile-form label {
+        color: #365d61;
+        font-size: 12px;
+        font-weight: 700;
+        margin-top: 8px;
+    }
+
+    .staff-profile-form input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 14px;
+        border: 1px solid #d5e2e2;
+        border-radius: 7px;
+        background: #fbfdfd;
+        color: #294f54;
+        font-size: 13px;
+        outline: none;
+    }
+
+    .staff-profile-form input:focus {
+        border-color: #17606b;
+        box-shadow: 0 0 0 3px rgba(23, 96, 107, 0.08);
+    }
+
+    .staff-profile-btn {
+        display: inline-block;
+        width: fit-content;
+        margin-top: 15px;
+        padding: 12px 20px;
+        background: #17606b;
+        color: #ffffff;
+        border: none;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .staff-profile-btn:hover {
+        background: #124d57;
+        color: #ffffff;
+    }
+
+    .staff-profile-btn.back {
+        background: #eaf2f2;
+        color: #17606b;
+    }
+
+    .staff-profile-btn.back:hover {
+        background: #dce9e9;
+    }
+
+    .staff-profile-footer {
+        margin-top: 25px;
+    }
+
+    @media (max-width: 600px) {
+        .staff-profile-header h1 {
+            font-size: 23px;
+        }
+
+        .staff-profile-card {
+            padding: 20px;
+        }
+
+        .staff-profile-btn {
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="staff-profile-page">
+
+    <div class="staff-profile-header">
+        <h1>MY PROFILE</h1>
+        <p>View and update your Staff account information.</p>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="staff-profile-alert success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="staff-profile-alert error">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="staff-profile-card">
+
+        <h2>PROFILE INFORMATION</h2>
+
+        <p class="card-description">
+            Update your personal account details.
+        </p>
+
+        <form method="post"
+              action="{{ path('app_staff_profile_update') }}"
+              class="staff-profile-form">
+
+            <input type="hidden"
+                   name="_token"
+                   value="{{ csrf_token('update_staff_profile') }}">
+
+            <label>Full Name</label>
+            <input type="text"
+                   name="name"
+                   value="{{ user.name }}"
+                   maxlength="100"
+                   required>
+
+            <label>Email Address</label>
+            <input type="email"
+                   name="email"
+                   value="{{ user.email }}"
+                   maxlength="180"
+                   required>
+
+            <button type="submit" class="staff-profile-btn">
+                UPDATE PROFILE
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="staff-profile-card">
+
+        <h2>CHANGE PASSWORD</h2>
+
+        <p class="card-description">
+            Update your password to help keep your account secure.
+        </p>
+
+        <form method="post"
+              action="{{ path('app_staff_change_password') }}"
+              class="staff-profile-form">
+
+            <input type="hidden"
+                   name="_token"
+                   value="{{ csrf_token('change_staff_password') }}">
+
+            <label>Current Password</label>
+            <input type="password"
+                   name="current_password"
+                   required
+                   autocomplete="current-password">
+
+            <label>New Password</label>
+            <input type="password"
+                   name="new_password"
+                   minlength="8"
+                   required
+                   autocomplete="new-password">
+
+            <label>Confirm New Password</label>
+            <input type="password"
+                   name="confirm_password"
+                   minlength="8"
+                   required
+                   autocomplete="new-password">
+
+            <button type="submit" class="staff-profile-btn">
+                CHANGE PASSWORD
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="staff-profile-footer">
+        <a href="{{ path('app_staff') }}" class="staff-profile-btn back">
+            BACK TO DASHBOARD
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
