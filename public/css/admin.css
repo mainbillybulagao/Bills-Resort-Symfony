@@ -657,28 +657,36 @@ a {
 
 }
 
-/* CUSTOMER LAYOUT FIX */
+/* =========================================================
+   CUSTOMER PAGE LAYOUT
+   ========================================================= */
 
-.customer-layout {
+body .admin-layout.customer-layout {
     display: block !important;
     width: 100% !important;
     margin: 0 !important;
-    padding: 0 !important;
 }
 
-.customer-layout .admin-content {
+body .admin-layout.customer-layout > main.admin-content {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 30px 20px !important;
-    box-sizing: border-box;
-    overflow-x: hidden;
+    padding: 40px 25px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
 }
 
-.customer-layout .customer-booking-page {
-    width: 100% !important;
-    max-width: 1200px !important;
-    margin: 0 auto !important;
-    box-sizing: border-box;
+/* CUSTOMER BOOKING PAGE */
+.customer-layout .booking-create-page {
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+/* CUSTOMER REVIEW PAGE */
+.customer-layout .review-page {
+    width: 100%;
+    max-width: 850px;
+    margin: 40px auto;
 }
